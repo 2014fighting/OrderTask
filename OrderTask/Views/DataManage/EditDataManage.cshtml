@@ -1,0 +1,95 @@
+﻿
+@{
+    ViewData["Title"] = "EditDataManage";
+}
+@using OrderTask.Web.Models
+@model OrderTask.Web.Models.DataManageModel
+<div class="layui-container comfield">
+    <blockquote class="layui-elem-quote layui-text">
+        温馨提示商品资料提交完成后记得去确认完成您的订单任务噢！
+    </blockquote>
+    <form class="layui-form layui-form-pane" action="">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">款号</label>
+            <div class="layui-input-block">
+                <input type="text" name="ProductNum" value="@Model.ProductNum" lay-verify="required" autocomplete="off" placeholder="请输入款号" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">拍摄图地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="ShotMapAddress" value="@Model.ShotMapAddress" lay-verify="required" autocomplete="off" placeholder="请输入拍摄图地址" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">上脚图地址</label>
+            <div class="layui-input-block">
+                <input type="tel" name="FootMapAddress" value="@Model.FootMapAddress" lay-verify="required" autocomplete="off" class="layui-input" placeholder="请输入上脚图地址">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">精修图地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="RuingMapAddress" value="@Model.RuingMapAddress" lay-verify="required" autocomplete="off" placeholder="请输入精修图地址" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">设计图地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="DesignMapAddress" value="@Model.DesignMapAddress" lay-verify="required" autocomplete="off" placeholder="请输入精修图地址" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注信息</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入内容" name="Remark" id="Remark" class="layui-textarea">@Model.Remark</textarea>
+            </div>
+        </div>
+        @if (ViewBag.pageType == 1)
+        {
+            <button class="layui-btn" lay-submit="" lay-filter="demo1">提交保存</button>
+            <button class="layui-btn layui-btn-primary" onclick="parent.layer.close(index);">关闭</button>
+        }
+
+    </form>
+</div>
+
+
+<script type="text/javascript">
+
+
+    //注意：parent 是 JS 自带的全局对象，可用于操作父页面
+    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+    layui.use(['form', 'layedit', 'laydate', 'table', 'layer','manageCom'],
+        function () {
+
+            var form = layui.form, layer = layui.layer, managecom = layui.manageCom;
+
+            //监听提交
+            form.on('submit(demo1)', function (data) {
+
+                //自定义验证规则
+                form.verify({
+
+                });
+                console.info(data.field);
+                $.post('@Url.Action("EditDataManage")',
+                    data.field,
+                    function (data) {
+                        if (data.Code === 0) {
+                            parent.layer.msg("添加成功！：" + data.Msg);
+                            parent.layer.close(index);
+                            parent.tableIns.reload();
+                        }
+                        else
+                            layer.msg("保存失败：" + data.Msg);
+                    });
+                return false;
+            });
+
+
+        });
+
+
+</script>

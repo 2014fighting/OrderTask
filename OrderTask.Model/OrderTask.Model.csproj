@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\**" />
+    <EmbeddedResource Remove="Migrations\**" />
+    <None Remove="Migrations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Migrations\20180129152433_wenqing.cs" />
+    <Compile Include="Migrations\20180129152433_wenqing.Designer.cs" />
+    <Compile Include="Migrations\20180130021427_wenqing1.cs" />
+    <Compile Include="Migrations\20180130021427_wenqing1.Designer.cs" />
+    <Compile Include="Migrations\20180130070200_wenqing3.cs" />
+    <Compile Include="Migrations\20180130070200_wenqing3.Designer.cs" />
+    <Compile Include="Migrations\20180130151912_wenqing4.cs" />
+    <Compile Include="Migrations\20180130151912_wenqing4.Designer.cs" />
+    <Compile Include="Migrations\OrderTaskContextModelSnapshot.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.0.1" />
+  </ItemGroup>
+
+</Project>

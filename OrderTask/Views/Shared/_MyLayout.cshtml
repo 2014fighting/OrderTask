@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    @*<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">*@
+    <title>@ViewData["Title"] - CodeFrame.Web</title>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <link href="~/lib/layui-v2.2.5/layui/css/layui.css" rel="stylesheet" />
+    <script src="~/lib/layui-v2.2.5/layui/layui.js"></script>
+    <link href="~/css/manage/manage.css" rel="stylesheet" />
+    <script src="~/js/manage/EnumData.js"></script>
+    <script type="text/javascript">
+        layui.config({
+            base: '/js/manage/' //假设这是你存放拓展模块的根目录
+        }).extend({ //设定模块别名
+            manageCom: 'manageCom' //如果 manageCom.js 是在根目录，也可以不用设定别名
+            , layuiExtend: 'layuiExtend'
+        });
+    </script>
+</head>
+<body >
+    <div>@RenderBody()</div>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

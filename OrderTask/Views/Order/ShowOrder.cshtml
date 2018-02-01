@@ -1,0 +1,311 @@
+﻿
+@{
+    ViewData["Title"] = "ShowOrder";
+
+}
+@using OrderTask.Web.Models
+@model OrderTask.Web.Models.OrderModel
+<link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+<link href="~/lib/bootstrap-select/bootstrap-select.css" rel="stylesheet" />
+<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+<script src="~/lib/bootstrap-select/bootstrap-select.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="~/lib/UEditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="~/lib/UEditor/ueditor.all.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="~/lib/UEditor/lang/zh-cn/zh-cn.js"></script>
+
+<div class="layui-container">
+    @*<blockquote class="layui-elem-quote layui-text">
+            鉴于小伙伴的普遍反馈，先温馨提醒两个常见“问题”：1. <a href="#" target="_blank">为什么select/checkbox/radio没显示？</a> 2. <a href="#" target="_blank">动态添加的表单元素如何更新？</a>
+        </blockquote>*@
+    <form class="layui-form layui-form-pane" action="">
+
+        <div style="float: left" class="comfield">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">订单名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="OrderName" value="@Model.OrderName" lay-verify="required" autocomplete="off" placeholder="请输入名称" class="layui-input">
+                    </div>
+                </div>
+
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">预计完成时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" value="@Model.ExpectTime?.ToString("yyyy-MM-dd")" name="ExpectTime" id="ExpectTime" lay-verify="date" placeholder="yyyy-MM-dd" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">紧急程度</label>
+                    <div class="layui-input-block">
+
+                        <input type="radio" name="Degree" value="1" title="正常" checked>
+                        <input type="radio" name="Degree" value="2" title="重要">
+                        <input type="radio" name="Degree" value="3" title="紧急">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">订单类型</label>
+                <div class="layui-input-block">
+                    <select class="selectpicker" name="OrderTypeId" id="OrderTypeId" data-live-search="true" multiple="multiple" lay-ignore></select>
+                </div>
+            </div>
+
+
+            <div class="layui-form-item" id="itemrp" style="display: none">
+                <div class="layui-inline">
+                    <label class="layui-form-label">接单人</label>
+                    <div class="layui-input-inline">
+                        <select name="ReceivePersons" id="ReceivePersons" lay-verify="required" lay-search="">
+                            <option value="">直接选择或搜索选择</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <table id="demo" lay-filter="test"></table>
+            @Html.TextAreaFor(i => i.OrderDescribe, new { placeholder = "订单详情" })
+
+            <script type="text/html" id="groupTpl">
+                {{# var res; enumGroup.forEach(function(item, index) { if(d.Group==item.value){ res= item.text;return; } }); }}
+
+                {{# if(res ===undefined){ }}
+                {{ "" }}
+                {{# } else { }}
+                {{ res }}
+                {{# } }}
+            </script>
+            <script type="text/html" id="ReceiveStateTpl">
+                {{# var ress; enumReceiveState.forEach(function(item, index) { if(d.ReceiveState==item.value){ ress= item.text;return; } }); }}
+
+                {{# if(ress ===undefined){ }}
+                {{ "" }}
+                {{# } else { }}
+                {{ ress }}
+                {{# } }}
+            </script>
+            @if (ViewBag.ismanager)
+            {
+                <a class="layui-btn layui-btn-disabled" id="btnReceive">确认接单</a>
+                <a class="layui-btn layui-btn-disabled" id="btnRefuse">拒绝接单</a>
+                <a class="layui-btn layui-btn-disabled" id="btnConfirm">确认完成</a>
+            }
+            else
+            {
+                <a class="layui-btn" id="btnReceive">确认接单</a>
+                <a class="layui-btn" id="btnRefuse">拒绝接单</a>
+                <a class="layui-btn" id="btnConfirm">确认完成</a>
+            }
+
+            <a class="layui-btn layui-btn-primary" onclick="parent.layer.close(index);">关闭</a>
+            @*</div>
+                </div>*@
+            <script type="text/html" id="barDemo">
+                {{# var a='@ViewBag.ismanager'; if(a!='False'){ }}
+                <a class="layui-btn layui-btn-xs" lay-event="ReSelect"><i class="layui-icon">&#xe642;</i>重新指派</a>
+                {{# } else { }}
+                <a class="layui-btn layui-btn-xs layui-btn-disabled" lay-event="ReSelect"><i class="layui-icon">&#xe642;</i>重新指派</a>
+                {{# } }}
+                <a class="layui-btn layui-btn-danger layui-btn-xs" id="btnEvaluate"><i class="layui-icon">&#xe630;</i>评分</a>
+            </script>
+        </div>
+
+    </form>
+</div>
+
+<script type="text/javascript">
+
+    //注意：parent 是 JS 自带的全局对象，可用于操作父页面
+    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+    layui.use(['form', 'layedit','table', 'layer','laydate','manageCom'],
+        function () {
+
+            var form = layui.form,
+                layer = layui.layer,
+                laydate = layui.laydate,
+                managecom = layui.manageCom, table = layui.table;
+
+            enumOrderType.forEach(
+                function(item, index) {
+                    $('#OrderTypeId').append("<option value=" + item.value + ">" + item.text +"</option>");
+                });
+            $('#OrderTypeId').selectpicker({
+                noneSelectedText: "==请选择订单类型==",
+                width:"100%"
+            });
+            var arr = '@Model.StrOrderTypeIds'.split(',');
+            $('#OrderTypeId').selectpicker('val', arr);
+            $('#OrderTypeId').selectpicker('refresh');
+            $('#OrderTypeId').selectpicker('render');
+
+
+
+
+            $.get('@Url.Action("GetUserList","UserInfo")', function (data) {
+                console.info(data);
+                data.forEach(
+                    function (groups, index) {
+                        var tempg = groups.Group;
+                        enumGroup.forEach(function(item, index) {
+                            if (item.value == groups.Group) {
+                                tempg = item.text+"组";
+                                return;
+                            }
+                        });
+                        var otpgroup = "<optgroup  label=" + tempg + ">";
+                        var otptions = "";
+                        groups.SelectsModel.forEach(
+                            function (item, index) {
+                                otptions = otptions+"<option value=" + item.value + ">" + item.text +"</option>";
+                            });
+                        otpgroup = otpgroup + otptions + "</optgroup>";
+
+                        $('#ReceivePersons').append(otpgroup);
+                        console.info(otpgroup);
+                    }); form.render('select');
+
+            });
+
+            //展示已知数据
+            var tableIns = table.render({
+                elem: '#demo',
+                url: '@Url.Action("GetReceivePesionList","UserInfo")?orderId=' + managecom.getUrlParam("Id"), height:
+                    'auto', cols: [[//标题栏
+                    //{ checkbox: true, LAY_CHECKED: false }, //默认全选
+                    { field: 'Id', title: 'Id', width: 80, sort: true }
+                    , { field: 'TrueName', title: '接单人', width:120 }
+                    , { field: 'Group', title: '所属小组', width: 120, templet: '#groupTpl' }
+                    , { field: 'ReceiveState', title: '接收状态', width: 150, templet: '#ReceiveStateTpl' }
+                    , { field: 'RefuseResion', title: '拒绝原因', width: 200}
+                    //, { field: 'Remark', title: '完成备注', width: 120 }
+                    , { field: 'JobScheduling', title: '当前排期', width: 150 }
+                    , { fixed: 'right', width: 210, align: 'center', toolbar: '#barDemo' }
+                ]]
+                //, skin: 'row' //表格风格
+                , even: false
+                , page: true //是否显示分页
+                , limits: [5, 7, 10, 100]
+                , limit: 10 //每页默认显示的数量
+                , loading: true
+            });
+        //拒绝接单
+            $("#btnRefuse").on('click', function () {
+                if ('@ViewBag.ismanager' != 'False') {
+                    return;}
+                layer.prompt({ title: '请填写拒绝该订单的原因。', formType: 2 },
+                    function(text, index) {
+                        layer.close(index);
+                        $.get('@Url.Action("RefuseOrder")',
+                            { orderId: managecom.getUrlParam('Id'), resion: text },
+                            function(data) {
+                                if (data.Code ===0) {
+                                    layer.msg("操作成功！");
+                                    tableIns.reload();
+                                } else
+                                    layer.msg("操作失败！：" + data.Msg);
+                            });
+                    });
+
+            });
+        //确认接单
+            $("#btnReceive").on('click', function () {
+                if ('@ViewBag.ismanager' != 'False') {
+                    return;}
+                layer.confirm('确定要接该订单？', {
+                    btn: ['确认','我后悔了'] //按钮
+                }, function(){
+                    $.get('@Url.Action("ReceiveOrder")',
+                        { orderId: managecom.getUrlParam('Id') },
+                        function(data) {
+                            if (data.Code === 0) {
+                                layer.msg("操作成功！");
+                                tableIns.reload();
+                            } else
+                                layer.msg("操作失败！：" + data.Msg);
+                        });
+                    }, function () {
+                    //后悔了
+                });
+
+            });
+            //确认完成
+            $("#btnConfirm").on('click', function () {
+                if ('@ViewBag.ismanager' != 'False') {
+                    return;}
+                layer.confirm('请确保任务材料都已经上传？', {
+                    btn: ['确认完成','再想想'] //按钮
+                }, function(){
+                    $.get('@Url.Action("ConfrimeOrder")',
+                        { orderId: managecom.getUrlParam('Id') },
+                        function(data) {
+                            if (data.Code === 0) {
+                                layer.msg("操作成功！");
+                                tableIns.reload();
+                            } else
+                                layer.msg("操作失败！：" + data.Msg);
+                        });
+                }, function(){
+                     //再想想
+                });
+
+            });
+
+
+             //日期
+            laydate.render({
+                elem: '#ExpectTime'
+                //, type: 'datetime'
+            });
+            var editor = UE.getEditor('OrderDescribe');
+
+            //给radio 赋值
+            $("input[name='Degree'][value=" +@Model.Degree+"]").attr("checked","checked");
+            form.render('radio');
+            //监听工具条
+            table.on('tool(test)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                var tr = obj.tr; //获得当前行 tr 的DOM对象
+                console.info(data);
+                if (layEvent === 'ReSelect') { //重新指派
+                    if ('@ViewBag.ismanager' == 'False') {
+                        return;}
+                    layer.open({
+                        type:1,
+                        title: '重新指派接单人',
+                        shadeClose: true,
+                        //shade: false,
+                        btn: ['确定指派', '关闭'], //只是为了演示
+                        maxmin: true, //开启最大化最小化按钮
+                        area: ['393px', '500px'],
+                        content: $('#itemrp')
+                        , yes: function () {
+                            var val = $('#ReceivePersons').val();
+                            if (val=="") {
+                                layer.msg("请选择接单人！");
+                                return;
+                            }
+                                $.get('@Url.Action("ReAppoint")',
+                                    { userId: val, receiveId: data.Id },
+                                function(data) {
+                                    if (data.Code === 0) {
+                                        layer.closeAll(); layer.msg('指派成功！');
+                                        tableIns.reload();
+                                    } else
+                                        layer.msg("指派失败！：" + data.Msg);
+                                });
+
+
+                        }
+                    });
+                }
+            });
+
+        });
+
+
+
+</script>

@@ -1,0 +1,187 @@
+﻿
+@{
+    ViewData["Title"] = "EditOrder";
+}
+ @model OrderTask.Web.Models.OrderModel
+<link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+<link href="~/lib/bootstrap-select/bootstrap-select.css" rel="stylesheet" />
+<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+<script src="~/lib/bootstrap-select/bootstrap-select.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="~/lib/UEditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="~/lib/UEditor/ueditor.all.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="~/lib/UEditor/lang/zh-cn/zh-cn.js"></script>
+
+<div class="layui-container">
+    @*<blockquote class="layui-elem-quote layui-text">
+            鉴于小伙伴的普遍反馈，先温馨提醒两个常见“问题”：1. <a href="#" target="_blank">为什么select/checkbox/radio没显示？</a> 2. <a href="#" target="_blank">动态添加的表单元素如何更新？</a>
+        </blockquote>*@
+    <form class="layui-form layui-form-pane" action="">
+
+        <div style="float: left" class="comfield">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">订单名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="OrderName" value="@Model.OrderName" lay-verify="required" autocomplete="off" placeholder="请输入名称" class="layui-input">
+                    </div>
+                </div>
+
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">预计完成时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="ExpectTime" value="@Model.ExpectTime?.ToString("yyyy-MM-dd")"  id="ExpectTime" lay-verify="date" placeholder="yyyy-MM-dd" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">紧急程度</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="Degree" value="1" title="正常" checked="">
+                        <input type="radio" name="Degree" value="2" title="重要">
+                        <input type="radio" name="Degree" value="3" title="紧急">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">订单类型</label>
+                <div class="layui-input-block">
+                    <select class="selectpicker" name="OrderTypeId" id="OrderTypeId" data-live-search="true" multiple="multiple" lay-ignore></select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">接单人</label>
+                <div class="layui-input-block">
+                    <select class="selectpicker" name="ReceivePersons" id="ReceivePersons" data-live-search="true" multiple="multiple" lay-ignore></select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">订单详情</label>
+                <div class="layui-input-block">
+                    @Html.TextAreaFor(i => i.OrderDescribe, new { placeholder = "订单详情" })
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="demo1">提交修改</button>
+                    <button class="layui-btn layui-btn-primary" onclick="parent.layer.close(index);">关闭</button>
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+</div>
+
+<script type="text/javascript">
+
+    //注意：parent 是 JS 自带的全局对象，可用于操作父页面
+    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+    layui.use(['form', 'layedit','table', 'layer','laydate','manageCom'],
+        function () {
+
+            var form = layui.form,
+                layer = layui.layer,
+                laydate = layui.laydate,
+                managecom = layui.manageCom;
+
+            //初始化订单类型
+            enumOrderType.forEach(
+                function(item, index) {
+                    $('#OrderTypeId').append("<option value=" + item.value + ">" + item.text +"</option>");
+                });
+            $('#OrderTypeId').selectpicker({
+                noneSelectedText: "==请选择订单类型==",
+                width:"100%"
+            });
+            var arr = '@Model.StrOrderTypeIds'.split(',');
+            $('#OrderTypeId').selectpicker('val', arr);
+            $('#OrderTypeId').selectpicker('refresh');
+            $('#OrderTypeId').selectpicker('render');
+
+            //初始化radio
+            $("input[name='Degree'][value=" +@Model.Degree+"]").attr("checked","checked");
+            form.render('radio');
+
+
+            //初始化时间
+            laydate.render({
+                elem: '#ExpectTime'
+                //, type: 'datetime'
+            });
+            //初始化编辑器
+            var editor = UE.getEditor('OrderDescribe');
+
+            //初始化 接单人
+            $.get('@Url.Action("GetUserList","UserInfo")', function (data) {
+                console.info(data);
+                data.forEach(
+                    function (groups, index) {
+                        var tempg = groups.Group;
+                        enumGroup.forEach(function(item, index) {
+                            if (item.value == groups.Group) {
+                                tempg = item.text+"组";
+                                return;
+                            }
+                        });
+
+                        var otpgroup = "<optgroup  label=" + tempg + ">";
+                        var otptions = "";
+                        groups.SelectsModel.forEach(
+                            function (item, index) {
+                                otptions = otptions+"<option value=" + item.value + ">" + item.text +"</option>";
+                            });
+                        otpgroup = otpgroup + otptions + "</optgroup>";
+
+                        $('#ReceivePersons').append(otpgroup);
+
+                    });
+                $('#ReceivePersons').selectpicker({
+                    noneSelectedText: "==请选择订单类型==",
+                    width: "100%",
+                    multipleSeparator:'   |  '
+                });
+                var arr = '@ViewBag.ReceivePesions'.split(',');
+                $('#ReceivePersons').selectpicker('val', arr);
+                // 缺一不可
+                $('#ReceivePersons').selectpicker('refresh');
+                $('#ReceivePersons').selectpicker('render');
+            });
+
+            //监听提交
+            form.on('submit(demo1)', function (data) {
+
+                var orderTypeIds = $('#OrderTypeId').val();
+
+                var receivePersons = $('#ReceivePersons').val();
+                data.field.OrderTypeIds = orderTypeIds;
+                data.field.ReceivePersons = receivePersons;
+                //自定义验证规则
+                form.verify({
+
+                });
+
+                $.post('@Url.Action("EditOrder")',
+                    data.field,
+                    function (data) {
+                        if (data.Code === 0) {
+                            parent.layer.msg("修改成功！：" + data.Msg);
+                            parent.layer.close(index);
+                            parent.tableIns.reload();
+                        }
+                        else
+                            layer.msg("修改失败：" + data.Msg);
+                    });
+                return false;
+            });
+
+
+        });
+
+
+</script>

@@ -1,0 +1,68 @@
+﻿[
+  {
+    "id": "1",
+    "title": "系统管理",
+    "icon": "fa-cubes",
+    "spread": true,
+    "children": [
+      {
+        "id": "4",
+        "title": "用户管理",
+        "icon": "&#xe6c6;",
+        "url": "/UserInfo/Index"
+      },
+      {
+        "id": "5",
+        "title": "角色管理",
+        "icon": "&#xe63c;",
+        "url": "/RoleInfo/Index"
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "title": "业务管理",
+    "icon": "fa-cubes",
+    "spread": true,
+    "children": [
+      {
+        "id": "6",
+        "title": "派单管理",
+        "icon": "&#xe6c6;",
+        "url": "/Order/Index"
+      },
+      {
+        "id": "7",
+        "title": "订单日志",
+        "icon": "&#xe63c;",
+        "url": "/OrderLog/Index"
+      },
+      {
+        "id": "8",
+        "title": "订单类型",
+        "icon": "&#xe63c;",
+        "url": "/OrderType/Index"
+      }
+    ]
+  },
+  {
+    "id": "3",
+    "title": "其它模块",
+    "icon": "fa-cubes",
+    "spread": true,
+    "children": [
+      {
+        "id": "9",
+        "title": "资料管理",
+        "icon": "&#xe705;",
+        "url": "/DataManage/Index"
+      },
+      {
+        "id": "10",
+        "title": "数据分析",
+        "icon": "&#xe629;",
+        "url": "/DataManage/Index"
+      }
+    ]
+  } 
+]
