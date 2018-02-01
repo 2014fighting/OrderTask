@@ -7,6 +7,10 @@ using UEditorNetCore;
 
 namespace OrderTask.Web.Controllers
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// 参考 https://www.cnblogs.com/durow/archive/2016/11/30/6116393.html
+    /// </summary>
     [Route("api/[controller]")] //配置路由
     public class UEditorController : Controller
     {
