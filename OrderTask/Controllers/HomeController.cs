@@ -4,6 +4,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using OrderTask.Model.DbModel;
 using OrderTask.Service.ServiceInterface;
 using OrderTask.UnitOfWork;
 using OrderTask.Web.Models;
@@ -16,17 +17,19 @@ namespace OrderTask.Web.Controllers
     {
         #region Constructor
         private readonly ILogService<HomeController> _logger;
- 
-        public HomeController(  ILogService<HomeController> logger)
-        { 
+        private readonly IUnitOfWork _unitOfWork;
+        public HomeController(IUnitOfWork unitOfWork, ILogService<HomeController> logger)
+        {
+            _unitOfWork = unitOfWork;
             _logger = logger;
         }
         #endregion
         public IActionResult Index()
         {
-            ViewBag.userid = CurUserInfo.UserId;
-            ViewBag.truename = CurUserInfo.TrueName;
-            ViewBag.userid = CurUserInfo.RoleList;
+            var curUser = _unitOfWork.GetRepository<UserInfo>().Find(CurUserInfo.UserId);
+            ViewBag.userid = curUser.Id;
+            ViewBag.truename =curUser.TrueName;
+            ViewBag.handimg = curUser.Picture;
             return View();
         }
         public ActionResult MainPage()

@@ -45,12 +45,11 @@
                 </li>
                 <li class="layui-nav-item">
                     <a href="javascript:;">
-                        <img src="http://siyouku.cn/Content/CommonImg/20140621193541.png" class="layui-nav-img"> @ViewBag.truename
+                        <img src="@ViewBag.handimg" class="layui-nav-img"> @ViewBag.truename
                     </a>
                     <dl class="layui-nav-child">
                         <dd>
-                            <a href="javascript:;"
-                               kit-target data-options="{url:'@Url.Action("Index","Home")',icon:'&#xe658;',title:'基本资料',id:'966'}">
+                            <a href="javascript:;" id="baseinfo">
                                 <span>基本资料</span>
                             </a>
                         </dd>
@@ -123,6 +122,7 @@
 
 
     <script>
+ 
         var message;
         layui.config({
             base: '/lib/kitadmin/js/'
@@ -138,17 +138,18 @@
             app.set({
                 type: 'iframe'
             }).init();
-            $('#pay').on('click', function () {
-                location.href = '@Url.Action("Index")';
-                //layer.open({
-                //    title: false,
-                //    type: 1,
-                //    content: '<div><img src="http://kit.zhengjinfan.cn/build/images/pay.png" /></div>',
-                //    area: ['500px', '250px'],
-                //    shadeClose: true
-                //});
+            $('#baseinfo').on('click', function () {
+                layer.open({
+                    type: 2,
+                    title: '修改基础信息',
+                    shadeClose: true,
+                    //shade: false,
+                    maxmin: true, //开启最大化最小化按钮
+                    area: ['893px', '600px'],
+                    content: '/UserInfo/EditUser/' + @ViewBag.userid
+                });
             });
-
+           
             $('dl.skin > dd').on('click', function () {
                 var $that = $(this);
                 var skin = $that.children('a').data('skin');
@@ -157,11 +158,11 @@
 
 
             var setSkin = function (value) {
-                layui.data('kit_skin', {
-                    key: 'skin',
-                    value: value
-                });
-            },
+                    layui.data('kit_skin', {
+                        key: 'skin',
+                        value: value
+                    });
+                },
                 getSkinName = function () {
                     return layui.data('kit_skin').skin;
                 },

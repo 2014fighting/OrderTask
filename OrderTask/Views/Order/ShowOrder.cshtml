@@ -66,13 +66,20 @@
                     </div>
                 </div>
             </div>
-            
+
             <div id="itemmk" style="display: none;">
-                <textarea id="remarks" ></textarea>
+                <textarea id="remarks"></textarea>
             </div>
             <table id="demo" lay-filter="test"></table>
-            @Html.TextAreaFor(i => i.OrderDescribe, new { placeholder = "订单详情" })
-
+            
+            
+              
+            <div class="layui-form-item">
+                @Html.TextAreaFor(i => i.OrderDescribe, new { placeholder = "订单详情" })
+                @*<blockquote class="layui-elem-quote layui-quote-nm">
+                    @Html.Raw(Model.OrderDescribe)
+                </blockquote>*@
+            </div>
             <script type="text/html" id="groupTpl">
                 {{# var res; enumGroup.forEach(function(item, index) { if(d.Group==item.value){ res= item.text;return; } }); }}
 
@@ -92,21 +99,21 @@
                 {{# } }}
             </script>
             @if (ViewBag.ismanager)
-            {
-                <a class="layui-btn layui-btn-disabled" id="btnReceive">确认接单</a>
-                <a class="layui-btn layui-btn-disabled" id="btnRefuse">拒绝接单</a>
-                <a class="layui-btn layui-btn-disabled" id="btnConfirm">确认完成</a>
-            }
-            else
-            {
-                <a class="layui-btn" id="btnReceive">确认接单</a>
-                <a class="layui-btn" id="btnRefuse">拒绝接单</a>
-                <a class="layui-btn" id="btnConfirm">确认完成</a>
-            }
+    {
+        <a class="layui-btn layui-btn-disabled" id="btnReceive">确认接单</a>
+        <a class="layui-btn layui-btn-disabled" id="btnRefuse">拒绝接单</a>
+        <a class="layui-btn layui-btn-disabled" id="btnConfirm">确认完成</a>
+}
+else
+{
+        <a class="layui-btn" id="btnReceive">确认接单</a>
+        <a class="layui-btn" id="btnRefuse">拒绝接单</a>
+        <a class="layui-btn" id="btnConfirm">确认完成</a>
+}
 
             <a class="layui-btn layui-btn-primary" onclick="parent.layer.close(index);">关闭</a>
             @*</div>
-                </div>*@
+        </div>*@
             <script type="text/html" id="barDemo">
                 {{# var a='@ViewBag.ismanager'; if(a!='False'){ }}
                 <a class="layui-btn layui-btn-xs" lay-event="ReSelect"><i class="layui-icon">&#xe642;</i>重新指派</a>
@@ -271,7 +278,7 @@
                     }
                 });
                 var index =layedit.build('remarks', {
-                    height:350//设置编辑器高度
+                    height:355//设置编辑器高度
                 });
               
             });

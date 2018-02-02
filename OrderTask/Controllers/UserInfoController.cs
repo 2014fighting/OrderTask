@@ -122,7 +122,7 @@ namespace OrderTask.Web.Controllers
         {
             var res = new MgResult();
             //权限先写死
-            if (!CurUserInfo.RoleList.Any(i => i == "部门经理" || i.Contains("管理员")))
+            if (!CurUserInfo.RoleList.Any(i => i == "部门经理" || i.Contains("管理员"))&&model.Id!=CurUserInfo.UserId)
             {
                 res.Code = 999;
                 res.Msg = "您没有权限操作！";

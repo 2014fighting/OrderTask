@@ -27,6 +27,7 @@
                         <input type="text" name="Password" lay-verify="pass" autocomplete="off" placeholder="密码" class="layui-input">
                     </div>
                 </div>
+           
                 <div class="layui-inline">
                     <label class="layui-form-label">用户手机</label>
                     <div class="layui-input-inline">
@@ -40,8 +41,7 @@
                     </div>
                 </div>
 
-            </div>
-            <div class="layui-form-item">
+         
 
                 <div class="layui-inline">
                     <label class="layui-form-label">部门</label>
@@ -59,10 +59,7 @@
                     </div>
                 </div>
 
-            </div>
-
-            <div class="layui-form-item">
-
+         
                 <div class="layui-inline">
                     <label class="layui-form-label">所属小组</label>
                     <div class="layui-input-inline">
@@ -79,9 +76,7 @@
                     </div>
                 </div>
 
-            </div>
-
-            <div class="layui-form-item">
+         
 
                 <div class="layui-inline">
                     <label class="layui-form-label">职务</label>
@@ -112,13 +107,14 @@
         </div>
         
         <div style="float: left; position: absolute; right: 1px;top:5px">
-            
             <div class="layui-upload">
-                <div class="layui-upload-list">
-                    <img style="width:100px;height:100px" src="http://siyouku.cn/Content/CommonImg/20140621193541.png"id="demo1">
+               <input type="hidden" id="Picture" value="http://siyouku.cn/Content/CommonImg/20140621193541.png"/>
+                <div class="layui-upload-list" id="test1">
+                    <img style="width:100px;height:100px"  src="http://siyouku.cn/Content/CommonImg/20140621193541.png"id="demo1">
                     <p id="demoText"></p>
                 </div>
             </div>
+          
         </div>
 
            
@@ -134,10 +130,12 @@
 
     //注意：parent 是 JS 自带的全局对象，可用于操作父页面
     var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-    layui.use(['form', 'layedit', 'laydate', 'table', 'layer','manageCom'],
+    layui.use(['form', 'upload', 'element','layedit', 'laydate', 'table', 'layer','manageCom'],
         function () {
 
-            var form = layui.form, layer = layui.layer, managecom = layui.manageCom;
+            var form = layui.form, layer = layui.layer
+                , managecom = layui.manageCom,
+                element = layui.element, upload = layui.upload;
             $.get('@Url.Action("GetAllRoleInfo", "RoleInfo")', function (data) {
                 console.info(data);
                 data.forEach(
@@ -164,14 +162,43 @@
             managecom.selectInint('Post', enumPost);
             form.render('select');
 
+
+
+            //上传头像
+            var uploadInst = upload.render({
+                elem: '#test1'
+                , url: '/api/ImgService'
+                ,before: function(obj){
+                    //预读本地文件示例，不支持ie8
+                    obj.preview(function(index, file, result){
+                        $('#demo1').attr('src', result); //图片链接（base64）
+                    });
+                }
+                ,done: function(res){
+                    if(res.code == 0) {
+                        $('#Picture').val(res.data.src);
+                    }else{
+                        return layer.msg('上传失败');
+                    }
+                    //上传成功
+                }
+                ,error: function(){
+                    //演示失败状态，并实现重传
+                    var demoText = $('#demoText');
+                    demoText.html('<span style="color: #FF5722;">上传失败</span>');
+                    demoText.find('.demo-reload').on('click', function(){
+                        uploadInst.upload();
+                    });
+                }
+            });
           
             //监听提交
             form.on('submit(demo1)', function (data) {
 
                 var rolws = $('#UserRoles').val();
                 data.field.UserRoles = rolws;
-                console.info(rolws);
-                console.info(data.field);
+                data.field.Picture = $('#Picture').val();
+                 
                 //自定义验证规则
                 form.verify({
                     username: function(value) {
