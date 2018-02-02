@@ -11,9 +11,10 @@ using System;
 namespace OrderTask.Model.Migrations
 {
     [DbContext(typeof(OrderTaskContext))]
-    partial class OrderTaskContextModelSnapshot : ModelSnapshot
+    [Migration("20180202020916_wenqing6")]
+    partial class wenqing6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -143,8 +144,6 @@ namespace OrderTask.Model.Migrations
                     b.Property<string>("UpdateUser");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Operator");
 
                     b.HasIndex("OrderId");
 
@@ -618,10 +617,6 @@ namespace OrderTask.Model.Migrations
 
             modelBuilder.Entity("OrderTask.Model.DbModel.BisnessModel.OrderLog", b =>
                 {
-                    b.HasOne("OrderTask.Model.DbModel.UserInfo", "User")
-                        .WithMany()
-                        .HasForeignKey("Operator");
-
                     b.HasOne("OrderTask.Model.DbModel.BisnessModel.Order", "Order")
                         .WithMany()
                         .HasForeignKey("OrderId");

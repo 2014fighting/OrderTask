@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OrderTask.Model.DbModel.BisnessModel;
 using OrderTask.Service.ServiceInterface;
 using OrderTask.UnitOfWork;
@@ -37,11 +39,13 @@ namespace OrderTask.Web.Controllers
         [HttpGet]
         public ActionResult GetOrderLog(OrderLogSearch model, int page = 1, int limit = 10)
         {
-            var result = _unitOfWork.GetRepository<OrderLog>().GetEntities();
+            var result = _unitOfWork.GetRepository<OrderLog>()
+                .GetEntities().Include(i=>i.User).AsQueryable();
             if (model.OrderId.HasValue)
                 result = result.Where(i => i.OrderId== model.OrderId);
 
-            var w1 = result.OrderByDescending(x => x.Id).Skip((page - 1) * limit).Take(limit);
+            var w1 = result.OrderByDescending(x => x.Id).Skip((page - 1) * limit).Take(limit)
+                .ProjectTo<OrderLogModel>();
             return Json(new
             {
                 code = 0,

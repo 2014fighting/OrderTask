@@ -66,6 +66,10 @@
                     </div>
                 </div>
             </div>
+            
+            <div id="itemmk" style="display: none;">
+                <textarea id="remarks" ></textarea>
+            </div>
             <table id="demo" lay-filter="test"></table>
             @Html.TextAreaFor(i => i.OrderDescribe, new { placeholder = "订单详情" })
 
@@ -125,7 +129,7 @@
 
             var form = layui.form,
                 layer = layui.layer,
-                laydate = layui.laydate,
+                laydate = layui.laydate, layedit = layui.layedit,
                 managecom = layui.manageCom, table = layui.table;
 
             enumOrderType.forEach(
@@ -179,8 +183,8 @@
                     , { field: 'TrueName', title: '接单人', width:120 }
                     , { field: 'Group', title: '所属小组', width: 120, templet: '#groupTpl' }
                     , { field: 'ReceiveState', title: '接收状态', width: 150, templet: '#ReceiveStateTpl' }
-                    , { field: 'RefuseResion', title: '拒绝原因', width: 200}
-                    //, { field: 'Remark', title: '完成备注', width: 120 }
+                    , { field: 'RefuseResion', title: '拒绝原因', width: 150}
+                    , { field: 'Remark', title: '完成信息', width: 120 }
                     , { field: 'JobScheduling', title: '当前排期', width: 150 }
                     , { fixed: 'right', width: 210, align: 'center', toolbar: '#barDemo' }
                 ]]
@@ -231,26 +235,45 @@
                 });
 
             });
+         
             //确认完成
             $("#btnConfirm").on('click', function () {
                 if ('@ViewBag.ismanager' != 'False') {
                     return;}
-                layer.confirm('请确保任务材料都已经上传？', {
-                    btn: ['确认完成','再想想'] //按钮
-                }, function(){
-                    $.get('@Url.Action("ConfrimeOrder")',
-                        { orderId: managecom.getUrlParam('Id') },
+                //清空选值
+                $('#remarks').val('');
+               
+                layer.open({
+                    type:1,
+                    title: '请填写完成备份信息！',
+                    shadeClose: true,
+                    //shade: false,
+                    btn: ['确认提交', '关闭'], //只是为了演示
+                    maxmin: true, //开启最大化最小化按钮
+                    area: ['800px', '500px'],
+                    content: $('#itemmk')
+                    , yes: function () {
+                        var tempval = layedit.getContent(index);
+                        if (tempval=="") {
+                            layer.msg("完成备份信息必须填写！");
+                            return;
+                        }
+                        $.post('@Url.Action("ConfrimeOrder")',
+                            { orderId: managecom.getUrlParam('Id'), remark: tempval },
                         function(data) {
                             if (data.Code === 0) {
+                                layer.closeAll();  
                                 layer.msg("操作成功！");
                                 tableIns.reload();
                             } else
                                 layer.msg("操作失败！：" + data.Msg);
                         });
-                }, function(){
-                     //再想想
+                    }
                 });
-
+                var index =layedit.build('remarks', {
+                    height:350//设置编辑器高度
+                });
+              
             });
 
 
@@ -260,6 +283,7 @@
                 //, type: 'datetime'
             });
             var editor = UE.getEditor('OrderDescribe');
+           
 
             //给radio 赋值
             $("input[name='Degree'][value=" +@Model.Degree+"]").attr("checked","checked");
@@ -272,7 +296,11 @@
                 console.info(data);
                 if (layEvent === 'ReSelect') { //重新指派
                     if ('@ViewBag.ismanager' == 'False') {
-                        return;}
+                        return;
+                    }
+                    //清空选值
+                    $('#ReceivePersons').val('');
+                    form.render('select');
                     layer.open({
                         type:1,
                         title: '重新指派接单人',
@@ -280,7 +308,7 @@
                         //shade: false,
                         btn: ['确定指派', '关闭'], //只是为了演示
                         maxmin: true, //开启最大化最小化按钮
-                        area: ['393px', '500px'],
+                        area: ['400px', '500px'],
                         content: $('#itemrp')
                         , yes: function () {
                             var val = $('#ReceivePersons').val();

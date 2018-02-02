@@ -13,7 +13,7 @@ namespace OrderTask.Model
     public class OrderTaskContext : DbContext
     {
         public DbSet<UserInfo> UserInfo { get; set; }
-        
+
         public DbSet<RoleInfo> RoleInfo { get; set; }
 
         public DbSet<Table> Table { get; set; }
@@ -31,7 +31,7 @@ namespace OrderTask.Model
         public DbSet<OrderLog> OrderLog { get; set; }
         public DbSet<OrderType> OrderType { get; set; }
         public DbSet<ReceivePerson> ReceivePerson { get; set; }
-        
+
 
         public OrderTaskContext(DbContextOptions<OrderTaskContext> options) : base(options)
         {
@@ -59,7 +59,12 @@ namespace OrderTask.Model
                 .HasOne(pt => pt.RoleInfo)
                 .WithMany(t => t.UserRoles)
                 .HasForeignKey(pt => pt.RoleId);
+
+            modelBuilder.Entity<UserInfo>().HasIndex(u => u.UserName).IsUnique();
+
+            modelBuilder.Entity<UserInfo>().HasIndex(u => u.TrueName).IsUnique();
+
         }
     }
- 
+
 }

@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace OrderTask.Model.DbModel.BisnessModel
+namespace OrderTask.Web.Models
 {
-    [Table("t_OrderLog")]
-    public  class OrderLog:BaseEntity<int>
+    public class OrderLogModel
     {
+        public int? Id { get; set; }
+
+        public DateTime CreteTime { get; set; }
+
         /// <summary>
         /// 操作人
         /// </summary>
-        public int? Operator { get; set; }
-
-        [ForeignKey("Operator")]
-        public UserInfo User { get; set; }
+        public string Operator { get; set; }
+ 
 
         public int? OrderId { get; set; }
-        [ForeignKey("OrderId")]
-        public Order Order { get; set; }
+     
 
         /// <summary>
         /// 操作类型

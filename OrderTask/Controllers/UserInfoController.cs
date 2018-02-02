@@ -48,29 +48,44 @@ namespace OrderTask.Web.Controllers
             return View();
         }
 
+
         [HttpPost]
         public IActionResult AddUser(UserInfoModel model)
         {
             var res = new MgResult();
+            //权限先写死
+            if (!CurUserInfo.RoleList.Any(i => i == "部门经理" || i.Contains("管理员")))
+            {
+                res.Code = 999;
+                res.Msg = "您没有权限操作！";
+                return Json(res);
+            }
             if (!ModelState.IsValid)
             {
                 res.Code = 110;
                 res.Msg = "后端模型验证失败！";
                 return Json(res);
             }
-            var user = _mapper.Map<UserInfo>(model);
-
-            var repoUser = _unitOfWork.GetRepository<UserInfo>();
-            user.UserRoles = new List<UserRole>();
-            model.UserRoles.ForEach(i =>
+            try
             {
-                user.UserRoles.Add(new UserRole { RoleId = i });
-            });
-            repoUser.Insert(user);
-            var r = _unitOfWork.SaveChanges();
+                var user = _mapper.Map<UserInfo>(model);
 
-            res.Code = r > 0 ? 0 : 1;
-            res.Msg = r > 0 ? "ok" : "SaveChanges失败！";
+                var repoUser = _unitOfWork.GetRepository<UserInfo>();
+                user.UserRoles = new List<UserRole>();
+                model.UserRoles.ForEach(i =>
+                {
+                    user.UserRoles.Add(new UserRole { RoleId = i });
+                });
+                repoUser.Insert(user);
+                var r = _unitOfWork.SaveChanges(); res.Code = r > 0 ? 0 : 1;
+                res.Msg = r > 0 ? "ok" : "SaveChanges失败！";
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                throw;
+            }
+          
             return Json(res);
         }
 
@@ -106,6 +121,13 @@ namespace OrderTask.Web.Controllers
         public IActionResult EditUser(UserInfoModel model)
         {
             var res = new MgResult();
+            //权限先写死
+            if (!CurUserInfo.RoleList.Any(i => i == "部门经理" || i.Contains("管理员")))
+            {
+                res.Code = 999;
+                res.Msg = "您没有权限操作！";
+                return Json(res);
+            }
             if (!ModelState.IsValid)
             {
                 res.Code = 110;
@@ -121,15 +143,18 @@ namespace OrderTask.Web.Controllers
                 res.Msg = "用户不存在！";
                 return Json(res);
             }
-            user.UserRoles.Clear();
-
-            //为啥这个clear 会报错 ,多对多不允许这样clear
-            if(_unitOfWork.SaveChanges()==0)
+            if (user.UserRoles.Any())
             {
-                res.Code = 130;
-                res.Msg = "修改接单人失败！";
-                return Json(res);
+                user.UserRoles.Clear();
+                //为啥这个clear 会报错 ,多对多不允许这样直接clear，要先savechage()?
+                if (_unitOfWork.SaveChanges() == 0)
+                {
+                    res.Code = 130;
+                    res.Msg = "修改用户信息失败！";
+                    return Json(res);
+                }
             }
+             
             user.UpdateTime = DateTime.Now;
             user.UpdateUser = CurUserInfo.UserName;
             _mapper.Map(model, user);
@@ -173,18 +198,23 @@ namespace OrderTask.Web.Controllers
         [HttpPost]
         public ActionResult UserDelete(List<int> ids)
         {
+            var res = new MgResult();
+             //权限先写死
+            if (!CurUserInfo.RoleList.Any(i => i == "部门经理" || i.Contains("管理员")))
+            {
+                res.Code = 999;
+                res.Msg = "您没有权限操作！";
+                return Json(res);
+            }
             var result = _unitOfWork.GetRepository<UserInfo>();
             ids.ForEach(i =>
             {
                 result.Delete(result.Find(i));
             });
             var r = _unitOfWork.SaveChanges() > 0;
-
-            return Json(new MgResult
-            {
-                Code = r ? 0 : 1,
-                Msg = r ? "ok" : "SaveChanges失败！"
-            });
+            res.Code = r ? 0 : 1;
+            res.Msg = r ? "ok" : "SaveChanges失败！";
+            return Json(res);
         }
 
         [HttpGet]

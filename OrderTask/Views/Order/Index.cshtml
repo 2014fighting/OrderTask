@@ -54,17 +54,7 @@
     <span style="color:red; "><strong>紧急</strong></span>
     {{# } }}
 </script>
-<script type="text/html" id="OrderStateTpl">
-    {{# var res; enumOrderState.forEach(function(item, index) { if(d.OrderState==item.value){ res= item.text;return; } }); }}
-
-
-    {{# if(res ===undefined){ }}
-    {{ "" }}
-    {{# } else { }}
-    {{ res }}
-    {{# } }}
-</script>
-
+ 
 <script type="text/html" id="OrderTypeIdsTpl">
     {{# var res; enumOrderType.forEach(function(item, index) { if(d.StrOrderTypeIds.indexOf(item.value)!=-1){ res=item.text+","+ res; } });res=res.replace(',undefined','');  }}
 
@@ -101,12 +91,12 @@
                     var id = $(this).children('td:eq(1)').text();
                    var obj= layer.open({
                         type: 2,
-                        title: '新增用户信息',
+                        title: '查看用户信息',
                         shadeClose: true,
                         //shade: false,
                         maxmin: true, //开启最大化最小化按钮
                         area: ['893px', '600px'],
-                        content: '@Url.Action("EditOrder")/' + id
+                        content: '@Url.Action("ShowOrder")?Id=' + id
                     });
                     layer.full(obj);
                 });
@@ -160,7 +150,7 @@
                     ids.forEach(function (value) {
                             postdata.push(value.Id);
                         });
-                   
+
                     $.ajax({
                         type: "post",
                         url: '@Url.Action("OrderClose")',
@@ -196,7 +186,7 @@
             $("#btndel").on('click',
                 function () {
                     var checkStatus = table.checkStatus('demo');
-                    var checkdata = checkStatus.data;  
+                    var checkdata = checkStatus.data;
                     if (checkdata.length == 0) {
                         layer.msg("请选择要取消的数据支持批量取消！");
                         return;
@@ -212,7 +202,21 @@
                     { checkbox: true, LAY_CHECKED: false } //默认全选
                     , { field: 'Id', title: 'Id', width: 80, sort: true }
                     , { field: 'OrderName', title: '订单名称', width: 220 }
-                    , { field: 'OrderState', title: '订单状态', width: 100, templet: '#OrderStateTpl' }
+                    , {
+                        field: 'OrderState', title: '订单状态', width: 100, templet: function(d) {
+                            var res; enumOrderState.forEach(function (item, index) { if (d.OrderState == item.value) { res = item.text; return; } });
+                            if (res === undefined) return "";
+                            else {
+                                if (res == "接单中")
+                                    return '<span style="color:red">接单中</span>';
+                                else if (res == "已完成")
+                                    return '<span style="color:gree">已完成</span>';
+                                else if (res == "未确认") {
+                                    return '<span style="color:black">未确认</span>';
+                                } else
+                                    return '<span style="color:blue">已取消</span>';;
+                            }
+                        } }
                     , { field: 'Degree', title: '紧急程度', width: 100, templet: '#DegreeTpl' }
                     , { field: 'CreteUser', title: '派单人', width: 120 }
                     , { field: 'StrReceivePersons', title: '所有接单人', width: 150 }
@@ -223,10 +227,10 @@
                         field: 'ExistRefuse', title: '部分拒绝', width: 100, templet: function(d) {
                             if (d.ExistRefuse)
                                 return '<span style="color:red">是</span>';
-                            else 
+                            else
                                 return'<span style="color:black">否</span>';
                         }}
-                
+
                     , { fixed: 'right', width: 210, align: 'center', toolbar: '#barDemo' }
                 ]]
                 //, skin: 'row' //表格风格
@@ -242,7 +246,7 @@
                 var data = obj.data; //获得当前行数据
                 var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 var tr = obj.tr; //获得当前行 tr 的DOM对象
-            
+
                 if (layEvent === 'detail') { //查看
                   var conentobj=  layer.open({
                         type: 2,

@@ -26,7 +26,7 @@ namespace OrderTask.Service.Service
         public bool IsComplete(int orderId)
         {
             return !_unitOfWork.GetRepository<ReceivePerson>().GetEntities(i => i.OrderId == orderId)
-                .Any(i => i.ReceiveState != 4);
+                .Any(i => i.ReceiveState !=4);
         }
     }
 }

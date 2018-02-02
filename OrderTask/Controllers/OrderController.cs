@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using OrderTask.Common.Enum;
 using OrderTask.Model.DbModel;
@@ -138,12 +139,18 @@ namespace OrderTask.Web.Controllers
             }
             var order = _unitOfWork.GetRepository<Order>().GetEntities().Include(i => i.ReceivePerson)
                 .FirstOrDefault(i => i.Id == model.Id&&i.OrderState==1);
-            if (order == null)
-            {
+            if (order == null) {
                 res.Code = 120;
                 res.Msg = "只有未确认的订单才允许修改！";
                 return Json(res);
             }
+            if (order.CreteUser != CurUserInfo.TrueName)
+            {
+                res.Code = 130;
+                res.Msg = "只有该订单的派单人才允许修改！";
+                return Json(res);
+            }
+           
             order.Degree = model.Degree;order.ExpectTime = model.ExpectTime;
             order.UpdateTime=DateTime.Now;
             order.OrderName = model.OrderName;
@@ -223,22 +230,31 @@ namespace OrderTask.Web.Controllers
         [HttpPost]
         public ActionResult OrderClose(List<int> ids)
         {
+            var res = new MgResult();
             var result = _unitOfWork.GetRepository<Order>();
+            var temp = false;
             ids.ForEach(i =>
             {
                 var x = result.Find(i);
-                x.OrderState = 5;
-                _orderLogService.AddOrderLog(i, EnumOrderLogType.Close
-                    , CurUserInfo, "取消订单操作.");
+                if (x.CreteUser != CurUserInfo.TrueName) //只允许取消自建的派单
+                {
+                    temp = true;
+                }
+               x.OrderState = 5;
+                    _orderLogService.AddOrderLog(i, EnumOrderLogType.Close
+                        , CurUserInfo, "取消订单操作.");
+                
             });
-
-            var r = _unitOfWork.SaveChanges() > 0;
-
-            return Json(new MgResult
+            if (temp)
             {
-                Code = r ? 0 : 1,
-                Msg = r ? "ok" : "SaveChanges失败！"
-            });
+                res.Code = 998;
+                res.Msg = "只允许取消自己的派单！";
+                return Json(res);
+            }
+            var r = _unitOfWork.SaveChanges() > 0;
+            res.Code = r ? 0 : 1;
+            res.Msg = r ? "ok" : "SaveChanges失败！";
+            return Json(res);
         }
 
         [HttpGet]
@@ -334,16 +350,17 @@ namespace OrderTask.Web.Controllers
             result.Msg = r > 0 ? "ok" : "SaveChanges失败！";
             return Json(result);
         }
+
         /// <summary>
         /// 确认完成
         /// </summary>
         /// <param name="orderId">订单编号</param>
+        /// <param name="remark">订单完成备注</param>
         /// <returns></returns>
-        [HttpGet]
-        public ActionResult ConfrimeOrder(int orderId)
+        [HttpPost]
+        public ActionResult ConfrimeOrder(int orderId,string remark)
         {
             var result = new MgResult();
-            var order = _unitOfWork.GetRepository<Order>().Find(orderId);
             var receivep = _unitOfWork.GetRepository<ReceivePerson>().GetEntities(i => i.OrderId == orderId && i.UserInfoId == CurUserInfo.UserId).FirstOrDefault();
             if (receivep == null)
             {
@@ -351,25 +368,38 @@ namespace OrderTask.Web.Controllers
                 result.Msg = "订单对应的接单人不存在！";
                 return Json(result);
             }
-            if (receivep.ReceiveState == 4)
+            if (receivep.ReceiveState != 2)
             {
                 result.Code = 2;
-                result.Msg = "该订单您已经确认完成过了！";
+                result.Msg = "只有同意接单的状态才允许确认完成！";
                 return Json(result);
             }
             receivep.ReceiveState = 4;//确认完成
             receivep.CompleteTime = DateTime.Now;
-            //判断所有接单人是否都完成 若都完成才能吧订单状态改成已完成
-            if (_orderService.IsComplete(orderId))
-                order.OrderState = 3;//已完成
+            receivep.Remark = remark;
             //添加订单操作日志
             _orderLogService.AddOrderLog(orderId, EnumOrderLogType.Confirm
                 , CurUserInfo, "确认完成订单.");
-
-            var r = _unitOfWork.SaveChanges();
-
+            var r= _unitOfWork.SaveChanges();
             result.Code = r > 0 ? 0 : 1;
             result.Msg = r > 0 ? "ok" : "SaveChanges失败！";
+            if (r > 0)
+            {
+                var order = _unitOfWork.GetRepository<Order>().Find(orderId);
+
+                //判断所有接单人是否都完成 若都完成才能吧订单状态改成已完成
+                if (_orderService.IsComplete(orderId))
+                {
+                     order.OrderState = 3;//已完成
+                    _orderLogService.AddOrderLog(orderId, EnumOrderLogType.ChangeOrderstate
+                        , CurUserInfo, "确认完成订单.同时更新订单状态为已完成！！");
+                }
+                    
+                var w= _unitOfWork.SaveChanges();
+                if(w==0)
+                    _logger.Error("确认完成订单.同时更新订单状态失败。");
+            }
+        
             return Json(result);
         }
 
@@ -392,7 +422,7 @@ namespace OrderTask.Web.Controllers
                 return Json(result);
             }
             receive.UserInfoId = userId;
-            receive.ReceiveState = 2;//重新指派后默认人为接收
+            receive.ReceiveState =1;//重新指派后默认人为接收
 
             _orderLogService.AddOrderLog(Convert.ToInt32(receive.OrderId), EnumOrderLogType.ReAppont
                 , CurUserInfo, "重新指派,原接单人:" + receive.User.TrueName + ",拒绝原因:" + receive.RefuseResion);

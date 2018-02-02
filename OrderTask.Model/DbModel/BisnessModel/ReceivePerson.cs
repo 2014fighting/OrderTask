@@ -36,7 +36,7 @@ namespace OrderTask.Model.DbModel.BisnessModel
         /// </summary>
         public DateTime? CompleteTime { get; set; }
         /// <summary>
-        /// 同意或拒绝备注
+        /// 同意备注
         /// </summary>
         public string Remark { get; set; }
 

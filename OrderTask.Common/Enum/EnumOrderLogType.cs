@@ -15,7 +15,7 @@
         /// </summary>
         Receive = 3,
         /// <summary>
-        /// 发布
+        /// 拒绝
         /// </summary>
         Refuse = 4,
         /// <summary>
@@ -33,6 +33,11 @@
         /// <summary>
         /// 重新指派
         /// </summary>
-        ReAppont=8
+        ReAppont=8,
+
+        /// <summary>
+        /// 变更订单状态
+        /// </summary>
+        ChangeOrderstate = 8
     }
 }

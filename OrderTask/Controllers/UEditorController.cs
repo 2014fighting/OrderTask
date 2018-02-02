@@ -9,6 +9,7 @@ namespace OrderTask.Web.Controllers
 {
     /// <inheritdoc />
     /// <summary>
+    /// GitHub https://github.com/durow/UEditorNetCore
     /// 参考 https://www.cnblogs.com/durow/archive/2016/11/30/6116393.html
     /// </summary>
     [Route("api/[controller]")] //配置路由
