@@ -21,9 +21,9 @@ namespace OrderTask.Service.Service
             var repOrderLog=_unitOfWork.GetRepository<OrderLog>();
             repOrderLog.Insert(new OrderLog()
             {
-                CreteUser =curUserSession.TrueName,
+                CreateUser = curUserSession.TrueName,
                 Operator = curUserSession.UserId
-                ,CreteTime = DateTime.Now,
+                ,CreateTime = DateTime.Now,
                 Describe =content,
                 OperationType =Convert.ToInt32(logType),
                 OrderId =orderId

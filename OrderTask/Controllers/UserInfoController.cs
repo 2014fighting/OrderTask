@@ -76,6 +76,8 @@ namespace OrderTask.Web.Controllers
                 {
                     user.UserRoles.Add(new UserRole { RoleId = i });
                 });
+                user.CreateUser = CurUserInfo.TrueName;
+                //user.CreateUserId = CurUserInfo.UserId;
                 repoUser.Insert(user);
                 var r = _unitOfWork.SaveChanges(); res.Code = r > 0 ? 0 : 1;
                 res.Msg = r > 0 ? "ok" : "SaveChanges失败！";
@@ -156,7 +158,8 @@ namespace OrderTask.Web.Controllers
             }
              
             user.UpdateTime = DateTime.Now;
-            user.UpdateUser = CurUserInfo.UserName;
+            user.UpdateUser = CurUserInfo.TrueName;
+            user.UpdateUserId = CurUserInfo.UserId;
             _mapper.Map(model, user);
              
             var lisUr = new List<UserRole>();

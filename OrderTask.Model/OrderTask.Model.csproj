@@ -11,18 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Migrations\20180129152433_wenqing.cs" />
-    <Compile Include="Migrations\20180129152433_wenqing.Designer.cs" />
-    <Compile Include="Migrations\20180130021427_wenqing1.cs" />
-    <Compile Include="Migrations\20180130021427_wenqing1.Designer.cs" />
-    <Compile Include="Migrations\20180130070200_wenqing3.cs" />
-    <Compile Include="Migrations\20180130070200_wenqing3.Designer.cs" />
-    <Compile Include="Migrations\20180130151912_wenqing4.cs" />
-    <Compile Include="Migrations\20180130151912_wenqing4.Designer.cs" />
-    <Compile Include="Migrations\20180202020916_wenqing6.cs" />
-    <Compile Include="Migrations\20180202020916_wenqing6.Designer.cs" />
-    <Compile Include="Migrations\20180202031847_wenqing7.cs" />
-    <Compile Include="Migrations\20180202031847_wenqing7.Designer.cs" />
+    <Compile Include="Migrations\20180205082531_vicky.cs" />
+    <Compile Include="Migrations\20180205082531_vicky.Designer.cs" />
     <Compile Include="Migrations\OrderTaskContextModelSnapshot.cs" />
   </ItemGroup>
 

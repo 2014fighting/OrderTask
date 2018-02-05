@@ -98,7 +98,7 @@
                 {{ ress }}
                 {{# } }}
             </script>
-            @if (ViewBag.ismanager)
+            @if (!ViewBag.isReceivePersion)
     {
         <a class="layui-btn layui-btn-disabled" id="btnReceive">确认接单</a>
         <a class="layui-btn layui-btn-disabled" id="btnRefuse">拒绝接单</a>
@@ -204,7 +204,7 @@ else
             });
         //拒绝接单
             $("#btnRefuse").on('click', function () {
-                if ('@ViewBag.ismanager' != 'False') {
+                if ('@ViewBag.isReceivePersion' == 'False') {
                     return;}
                 layer.prompt({ title: '请填写拒绝该订单的原因。', formType: 2 },
                     function(text, index) {
@@ -223,7 +223,7 @@ else
             });
         //确认接单
             $("#btnReceive").on('click', function () {
-                if ('@ViewBag.ismanager' != 'False') {
+                if ('@ViewBag.isReceivePersion' == 'False') {
                     return;}
                 layer.confirm('确定要接该订单？', {
                     btn: ['确认','我后悔了'] //按钮
@@ -245,7 +245,7 @@ else
          
             //确认完成
             $("#btnConfirm").on('click', function () {
-                if ('@ViewBag.ismanager' != 'False') {
+                if ('@ViewBag.isReceivePersion' == 'False') {
                     return;}
                 //清空选值
                 $('#remarks').val('');

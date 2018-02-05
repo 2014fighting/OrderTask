@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace OrderTask.Model.Migrations
 {
-    public partial class wenqing : Migration
+    public partial class vicky : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,8 +15,9 @@ namespace OrderTask.Model.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CreteTime = table.Column<DateTime>(nullable: false),
-                    CreteUser = table.Column<string>(nullable: true),
+                    CreateTime = table.Column<DateTime>(nullable: false),
+                    CreateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    CreateUserId = table.Column<int>(nullable: true),
                     DesignMapAddress = table.Column<string>(maxLength: 300, nullable: true),
                     FootMapAddress = table.Column<string>(maxLength: 300, nullable: true),
                     PictureAddress1 = table.Column<string>(maxLength: 300, nullable: true),
@@ -30,7 +31,8 @@ namespace OrderTask.Model.Migrations
                     RuingMapAddress = table.Column<string>(maxLength: 300, nullable: true),
                     ShotMapAddress = table.Column<string>(maxLength: 300, nullable: true),
                     UpdateTime = table.Column<DateTime>(nullable: true),
-                    UpdateUser = table.Column<string>(nullable: true)
+                    UpdateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    UpdateUserId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -43,12 +45,14 @@ namespace OrderTask.Model.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CreteTime = table.Column<DateTime>(nullable: false),
-                    CreteUser = table.Column<string>(nullable: true),
+                    CreateTime = table.Column<DateTime>(nullable: false),
+                    CreateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    CreateUserId = table.Column<int>(nullable: true),
                     RowVersion = table.Column<DateTime>(nullable: false),
                     TypeName = table.Column<string>(maxLength: 20, nullable: true),
                     UpdateTime = table.Column<DateTime>(nullable: true),
-                    UpdateUser = table.Column<string>(nullable: true)
+                    UpdateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    UpdateUserId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -61,8 +65,9 @@ namespace OrderTask.Model.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CreteTime = table.Column<DateTime>(nullable: false),
-                    CreteUser = table.Column<string>(nullable: true),
+                    CreateTime = table.Column<DateTime>(nullable: false),
+                    CreateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    CreateUserId = table.Column<int>(nullable: true),
                     DptName = table.Column<string>(maxLength: 20, nullable: true),
                     IsActive = table.Column<bool>(nullable: false),
                     OrderBy = table.Column<int>(nullable: false),
@@ -70,7 +75,8 @@ namespace OrderTask.Model.Migrations
                     ReMark = table.Column<string>(nullable: true),
                     RowVersion = table.Column<DateTime>(nullable: false),
                     UpdateTime = table.Column<DateTime>(nullable: true),
-                    UpdateUser = table.Column<string>(nullable: true)
+                    UpdateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    UpdateUserId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -83,14 +89,16 @@ namespace OrderTask.Model.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CreteTime = table.Column<DateTime>(nullable: false),
-                    CreteUser = table.Column<string>(nullable: true),
+                    CreateTime = table.Column<DateTime>(nullable: false),
+                    CreateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    CreateUserId = table.Column<int>(nullable: true),
                     Describe = table.Column<string>(maxLength: 20, nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     RoleName = table.Column<string>(maxLength: 20, nullable: false),
                     RowVersion = table.Column<DateTime>(nullable: false),
                     UpdateTime = table.Column<DateTime>(nullable: true),
-                    UpdateUser = table.Column<string>(nullable: true)
+                    UpdateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    UpdateUserId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -104,14 +112,16 @@ namespace OrderTask.Model.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     ButtonId = table.Column<int>(nullable: false),
-                    CreteTime = table.Column<DateTime>(nullable: false),
-                    CreteUser = table.Column<string>(nullable: true),
+                    CreateTime = table.Column<DateTime>(nullable: false),
+                    CreateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    CreateUserId = table.Column<int>(nullable: true),
                     MentId = table.Column<int>(nullable: false),
                     RoleId = table.Column<int>(nullable: false),
                     RowVersion = table.Column<DateTime>(nullable: false),
                     Type = table.Column<int>(nullable: false),
                     UpdateTime = table.Column<DateTime>(nullable: true),
-                    UpdateUser = table.Column<string>(nullable: true)
+                    UpdateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    UpdateUserId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -124,8 +134,9 @@ namespace OrderTask.Model.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CreteTime = table.Column<DateTime>(nullable: false),
-                    CreteUser = table.Column<string>(nullable: true),
+                    CreateTime = table.Column<DateTime>(nullable: false),
+                    CreateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    CreateUserId = table.Column<int>(nullable: true),
                     IsActive = table.Column<bool>(nullable: false),
                     Link = table.Column<string>(nullable: true),
                     OrderBy = table.Column<int>(nullable: false),
@@ -134,7 +145,8 @@ namespace OrderTask.Model.Migrations
                     SystemIcon = table.Column<string>(nullable: true),
                     SystemName = table.Column<string>(nullable: true),
                     UpdateTime = table.Column<DateTime>(nullable: true),
-                    UpdateUser = table.Column<string>(nullable: true)
+                    UpdateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    UpdateUserId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -147,8 +159,9 @@ namespace OrderTask.Model.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CreteTime = table.Column<DateTime>(nullable: false),
-                    CreteUser = table.Column<string>(nullable: true),
+                    CreateTime = table.Column<DateTime>(nullable: false),
+                    CreateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    CreateUserId = table.Column<int>(nullable: true),
                     IsActive = table.Column<bool>(nullable: false),
                     IsMultiple = table.Column<bool>(nullable: false),
                     IsPaging = table.Column<bool>(nullable: false),
@@ -158,7 +171,8 @@ namespace OrderTask.Model.Migrations
                     ShowName = table.Column<string>(nullable: true),
                     TableName = table.Column<string>(nullable: true),
                     UpdateTime = table.Column<DateTime>(nullable: true),
-                    UpdateUser = table.Column<string>(nullable: true)
+                    UpdateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    UpdateUserId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -171,8 +185,9 @@ namespace OrderTask.Model.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CreteTime = table.Column<DateTime>(nullable: false),
-                    CreteUser = table.Column<string>(nullable: true),
+                    CreateTime = table.Column<DateTime>(nullable: false),
+                    CreateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    CreateUserId = table.Column<int>(nullable: true),
                     DepartMentId = table.Column<int>(nullable: true),
                     Describe = table.Column<string>(maxLength: 500, nullable: true),
                     Gender = table.Column<int>(nullable: true),
@@ -188,7 +203,8 @@ namespace OrderTask.Model.Migrations
                     Skill = table.Column<string>(maxLength: 100, nullable: true),
                     TrueName = table.Column<string>(maxLength: 20, nullable: false),
                     UpdateTime = table.Column<DateTime>(nullable: true),
-                    UpdateUser = table.Column<string>(nullable: true),
+                    UpdateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    UpdateUserId = table.Column<int>(nullable: true),
                     UserName = table.Column<string>(maxLength: 20, nullable: false)
                 },
                 constraints: table =>
@@ -214,8 +230,9 @@ namespace OrderTask.Model.Migrations
                     BtnScript = table.Column<string>(maxLength: 50, nullable: true),
                     BtnTip = table.Column<string>(maxLength: 50, nullable: true),
                     BtnUrl = table.Column<string>(maxLength: 300, nullable: true),
-                    CreteTime = table.Column<DateTime>(nullable: false),
-                    CreteUser = table.Column<string>(nullable: true),
+                    CreateTime = table.Column<DateTime>(nullable: false),
+                    CreateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    CreateUserId = table.Column<int>(nullable: true),
                     DisplayCondition = table.Column<string>(maxLength: 500, nullable: true),
                     EditType = table.Column<int>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
@@ -225,7 +242,8 @@ namespace OrderTask.Model.Migrations
                     SysTableId = table.Column<int>(nullable: false),
                     TableId = table.Column<int>(nullable: true),
                     UpdateTime = table.Column<DateTime>(nullable: true),
-                    UpdateUser = table.Column<string>(nullable: true)
+                    UpdateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    UpdateUserId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -246,8 +264,9 @@ namespace OrderTask.Model.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     ColumnName = table.Column<string>(maxLength: 30, nullable: true),
                     ColumnType = table.Column<int>(nullable: false),
-                    CreteTime = table.Column<DateTime>(nullable: false),
-                    CreteUser = table.Column<string>(nullable: true),
+                    CreateTime = table.Column<DateTime>(nullable: false),
+                    CreateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    CreateUserId = table.Column<int>(nullable: true),
                     DataOptions = table.Column<string>(maxLength: 300, nullable: true),
                     DisplayType = table.Column<int>(nullable: false),
                     FkTableId = table.Column<int>(nullable: false),
@@ -260,7 +279,8 @@ namespace OrderTask.Model.Migrations
                     TableId = table.Column<int>(nullable: true),
                     Tip = table.Column<string>(maxLength: 100, nullable: true),
                     UpdateTime = table.Column<DateTime>(nullable: true),
-                    UpdateUser = table.Column<string>(nullable: true)
+                    UpdateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    UpdateUserId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -279,8 +299,9 @@ namespace OrderTask.Model.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CreteTime = table.Column<DateTime>(nullable: false),
-                    CreteUser = table.Column<string>(nullable: true),
+                    CreateTime = table.Column<DateTime>(nullable: false),
+                    CreateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    CreateUserId = table.Column<int>(nullable: true),
                     IsActive = table.Column<bool>(nullable: false),
                     MenuName = table.Column<string>(maxLength: 20, nullable: true),
                     MenuUrl = table.Column<string>(maxLength: 500, nullable: true),
@@ -291,7 +312,8 @@ namespace OrderTask.Model.Migrations
                     SysTableId = table.Column<int>(nullable: true),
                     TableId = table.Column<int>(nullable: true),
                     UpdateTime = table.Column<DateTime>(nullable: true),
-                    UpdateUser = table.Column<string>(nullable: true)
+                    UpdateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    UpdateUserId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -317,9 +339,11 @@ namespace OrderTask.Model.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     ComplateTime = table.Column<DateTime>(nullable: true),
-                    CreteTime = table.Column<DateTime>(nullable: false),
-                    CreteUser = table.Column<string>(nullable: true),
+                    CreateTime = table.Column<DateTime>(nullable: false),
+                    CreateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    CreateUserId = table.Column<int>(nullable: true),
                     Degree = table.Column<int>(nullable: true),
+                    ExistRefuse = table.Column<bool>(nullable: false),
                     ExpectTime = table.Column<DateTime>(nullable: true),
                     FinishDescribe = table.Column<string>(nullable: true),
                     OrderDescribe = table.Column<string>(nullable: true),
@@ -328,7 +352,8 @@ namespace OrderTask.Model.Migrations
                     OrderTypeIds = table.Column<string>(nullable: true),
                     RowVersion = table.Column<DateTime>(nullable: false),
                     UpdateTime = table.Column<DateTime>(nullable: true),
-                    UpdateUser = table.Column<string>(nullable: true),
+                    UpdateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    UpdateUserId = table.Column<int>(nullable: true),
                     UserInfoId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -372,19 +397,27 @@ namespace OrderTask.Model.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CreteTime = table.Column<DateTime>(nullable: false),
-                    CreteUser = table.Column<string>(nullable: true),
+                    CreateTime = table.Column<DateTime>(nullable: false),
+                    CreateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    CreateUserId = table.Column<int>(nullable: true),
                     Describe = table.Column<string>(nullable: true),
                     OperationType = table.Column<int>(nullable: true),
                     Operator = table.Column<int>(nullable: true),
                     OrderId = table.Column<int>(nullable: true),
                     RowVersion = table.Column<DateTime>(nullable: false),
                     UpdateTime = table.Column<DateTime>(nullable: true),
-                    UpdateUser = table.Column<string>(nullable: true)
+                    UpdateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    UpdateUserId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_t_OrderLog", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_t_OrderLog_t_sys_UserInfo_Operator",
+                        column: x => x.Operator,
+                        principalTable: "t_sys_UserInfo",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_t_OrderLog_t_Order_OrderId",
                         column: x => x.OrderId,
@@ -399,14 +432,19 @@ namespace OrderTask.Model.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CreteTime = table.Column<DateTime>(nullable: false),
-                    CreteUser = table.Column<string>(nullable: true),
+                    CompleteTime = table.Column<DateTime>(nullable: true),
+                    CreateTime = table.Column<DateTime>(nullable: false),
+                    CreateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    CreateUserId = table.Column<int>(nullable: true),
                     OrderId = table.Column<int>(nullable: true),
                     ReceiveState = table.Column<int>(nullable: true),
+                    ReceiveTime = table.Column<DateTime>(nullable: true),
+                    RefuseResion = table.Column<string>(maxLength: 500, nullable: true),
                     Remark = table.Column<string>(nullable: true),
                     RowVersion = table.Column<DateTime>(nullable: false),
                     UpdateTime = table.Column<DateTime>(nullable: true),
-                    UpdateUser = table.Column<string>(nullable: true),
+                    UpdateUser = table.Column<string>(maxLength: 20, nullable: true),
+                    UpdateUserId = table.Column<int>(nullable: true),
                     UserInfoId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -430,6 +468,11 @@ namespace OrderTask.Model.Migrations
                 name: "IX_t_Order_UserInfoId",
                 table: "t_Order",
                 column: "UserInfoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_t_OrderLog_Operator",
+                table: "t_OrderLog",
+                column: "Operator");
 
             migrationBuilder.CreateIndex(
                 name: "IX_t_OrderLog_OrderId",
@@ -470,6 +513,18 @@ namespace OrderTask.Model.Migrations
                 name: "IX_t_sys_UserInfo_DepartMentId",
                 table: "t_sys_UserInfo",
                 column: "DepartMentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_t_sys_UserInfo_TrueName",
+                table: "t_sys_UserInfo",
+                column: "TrueName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_t_sys_UserInfo_UserName",
+                table: "t_sys_UserInfo",
+                column: "UserName",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_t_sys_UserRole_RoleId",

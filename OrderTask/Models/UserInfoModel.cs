@@ -33,6 +33,8 @@ namespace OrderTask.Web.Models
         public string Describe { get; set; }
 
         public string Picture { get; set; }
+        public string CreteUser { get; set; }
+        
 
         public List<int> UserRoles { get; set; }
     }

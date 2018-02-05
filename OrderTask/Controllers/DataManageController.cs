@@ -50,8 +50,9 @@ namespace OrderTask.Web.Controllers
             var dataManage = _mapper.Map<DataManage>(model);
 
             var repoDataManage = _unitOfWork.GetRepository<DataManage>();
-            dataManage.CreteUser = CurUserInfo.TrueName;
-            dataManage.CreteTime=DateTime.Now;
+            dataManage.CreateUser = CurUserInfo.TrueName;
+            dataManage.CreateUserId = CurUserInfo.UserId;
+            dataManage.CreateTime=DateTime.Now;
             repoDataManage.Insert(dataManage);
             var r = _unitOfWork.SaveChanges();
 
@@ -104,6 +105,7 @@ namespace OrderTask.Web.Controllers
             _mapper.Map(model, dataManage);
             dataManage.UpdateTime=DateTime.Now;
             dataManage.UpdateUser = CurUserInfo.TrueName;
+            dataManage.UpdateUserId = CurUserInfo.UserId;
             var r = _unitOfWork.SaveChanges();
 
             res.Code = r > 0 ? 0 : 1;

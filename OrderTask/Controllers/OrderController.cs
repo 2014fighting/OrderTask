@@ -55,16 +55,18 @@ namespace OrderTask.Web.Controllers
             var order = _mapper.Map<Order>(model);
 
             order.UserInfoId = CurUserInfo.UserId;
-            order.CreteTime = DateTime.Now;
+            order.CreateTime = DateTime.Now;
             order.OrderState = 1;
-            order.CreteUser = CurUserInfo.TrueName;
+            order.CreateUser = CurUserInfo.TrueName;
+            order.CreateUserId = CurUserInfo.UserId;
+
             var receivePerson = new List<ReceivePerson>();
             model.ReceivePersons.ForEach(i =>
             {
                 receivePerson.Add(new ReceivePerson()
                 {
-                    CreteTime = DateTime.Now,
-                    CreteUser = CurUserInfo.TrueName
+                    CreateTime = DateTime.Now,
+                    CreateUser = CurUserInfo.TrueName
                     ,
                     ReceiveState = 1,
                     UserInfoId = i
@@ -122,6 +124,7 @@ namespace OrderTask.Web.Controllers
             res.Id = order.Id;
             res.OrderDescribe = order.OrderDescribe;
             ViewBag.ismanager = CurUserInfo.RoleList.Any(i => i.Contains("经理"));
+            ViewBag.isReceivePersion = order.ReceivePerson.Any(i => i.UserInfoId == CurUserInfo.UserId);
             ViewBag.ReceivePesions = string.Join(",", order.ReceivePerson.Select(i => i.UserInfoId));
             ViewBag.curuserid = CurUserInfo.UserId;
             return View(res);
@@ -144,7 +147,7 @@ namespace OrderTask.Web.Controllers
                 res.Msg = "只有未确认的订单才允许修改！";
                 return Json(res);
             }
-            if (order.CreteUser != CurUserInfo.TrueName)
+            if (order.CreateUser != CurUserInfo.TrueName)
             {
                 res.Code = 130;
                 res.Msg = "只有该订单的派单人才允许修改！";
@@ -155,13 +158,14 @@ namespace OrderTask.Web.Controllers
             order.UpdateTime=DateTime.Now;
             order.OrderName = model.OrderName;
             order.UpdateUser = CurUserInfo.TrueName;
+            order.UpdateUserId = CurUserInfo.UserId;
             order.OrderDescribe = model.OrderDescribe;
          
             order.ReceivePerson.Clear();
             var lisRp = new List<ReceivePerson>();
             model.ReceivePersons.ForEach(i =>
             {
-                lisRp.Add(new ReceivePerson(){UserInfoId =i,ReceiveState =1,CreteTime = DateTime.Now,OrderId =model.Id});
+                lisRp.Add(new ReceivePerson(){UserInfoId =i,ReceiveState =1,CreateTime = DateTime.Now,OrderId =model.Id});
             });
             order.ReceivePerson = lisRp;
             order.OrderTypeIds = string.Join(",", model.OrderTypeIds.ToArray());
@@ -209,7 +213,7 @@ namespace OrderTask.Web.Controllers
                     OrderDescribe = i.OrderDescribe,
                     OrderName = i.OrderName,
                     OrderState = i.OrderState,
-                    CreteUser = i.CreteUser,
+                    CreteUser = i.CreateUser,
                     StrReceivePersons = string.Join(",", i.ReceivePerson.Select(x => x.User.TrueName).ToArray())
                 });
             });
@@ -236,7 +240,7 @@ namespace OrderTask.Web.Controllers
             ids.ForEach(i =>
             {
                 var x = result.Find(i);
-                if (x.CreteUser != CurUserInfo.TrueName) //只允许取消自建的派单
+                if (x.CreateUser != CurUserInfo.TrueName) //只允许取消自建的派单
                 {
                     temp = true;
                 }

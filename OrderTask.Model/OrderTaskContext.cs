@@ -64,6 +64,17 @@ namespace OrderTask.Model
 
             modelBuilder.Entity<UserInfo>().HasIndex(u => u.TrueName).IsUnique();
 
+        
+            //modelBuilder.Entity<UserInfo>()
+            //    .HasOne(p => p.CreateUserInfo)
+            //    .WithOne().HasForeignKey("CreateUserId");
+
+            //modelBuilder.Entity<UserInfo>()
+            //    .HasOne(p => p.UpdateUser)
+            //    .WithOne().HasForeignKey("UpdateUserId");
+
+
+
         }
     }
 

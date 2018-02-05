@@ -11,8 +11,8 @@ using System;
 namespace OrderTask.Model.Migrations
 {
     [DbContext(typeof(OrderTaskContext))]
-    [Migration("20180130021427_wenqing1")]
-    partial class wenqing1
+    [Migration("20180205082531_vicky")]
+    partial class vicky
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,9 +26,12 @@ namespace OrderTask.Model.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("CreteTime");
+                    b.Property<DateTime>("CreateTime");
 
-                    b.Property<string>("CreteUser");
+                    b.Property<string>("CreateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("CreateUserId");
 
                     b.Property<string>("DesignMapAddress")
                         .HasMaxLength(300);
@@ -68,7 +71,10 @@ namespace OrderTask.Model.Migrations
 
                     b.Property<DateTime?>("UpdateTime");
 
-                    b.Property<string>("UpdateUser");
+                    b.Property<string>("UpdateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("UpdateUserId");
 
                     b.HasKey("Id");
 
@@ -82,11 +88,16 @@ namespace OrderTask.Model.Migrations
 
                     b.Property<DateTime?>("ComplateTime");
 
-                    b.Property<DateTime>("CreteTime");
+                    b.Property<DateTime>("CreateTime");
 
-                    b.Property<string>("CreteUser");
+                    b.Property<string>("CreateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("CreateUserId");
 
                     b.Property<int?>("Degree");
+
+                    b.Property<bool>("ExistRefuse");
 
                     b.Property<DateTime?>("ExpectTime");
 
@@ -106,7 +117,10 @@ namespace OrderTask.Model.Migrations
 
                     b.Property<DateTime?>("UpdateTime");
 
-                    b.Property<string>("UpdateUser");
+                    b.Property<string>("UpdateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("UpdateUserId");
 
                     b.Property<int?>("UserInfoId");
 
@@ -122,9 +136,12 @@ namespace OrderTask.Model.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("CreteTime");
+                    b.Property<DateTime>("CreateTime");
 
-                    b.Property<string>("CreteUser");
+                    b.Property<string>("CreateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("CreateUserId");
 
                     b.Property<string>("Describe");
 
@@ -139,9 +156,14 @@ namespace OrderTask.Model.Migrations
 
                     b.Property<DateTime?>("UpdateTime");
 
-                    b.Property<string>("UpdateUser");
+                    b.Property<string>("UpdateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("UpdateUserId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Operator");
 
                     b.HasIndex("OrderId");
 
@@ -153,9 +175,12 @@ namespace OrderTask.Model.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("CreteTime");
+                    b.Property<DateTime>("CreateTime");
 
-                    b.Property<string>("CreteUser");
+                    b.Property<string>("CreateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("CreateUserId");
 
                     b.Property<DateTime>("RowVersion")
                         .IsConcurrencyToken();
@@ -165,7 +190,10 @@ namespace OrderTask.Model.Migrations
 
                     b.Property<DateTime?>("UpdateTime");
 
-                    b.Property<string>("UpdateUser");
+                    b.Property<string>("UpdateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("UpdateUserId");
 
                     b.HasKey("Id");
 
@@ -177,13 +205,20 @@ namespace OrderTask.Model.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("CreteTime");
+                    b.Property<DateTime?>("CompleteTime");
 
-                    b.Property<string>("CreteUser");
+                    b.Property<DateTime>("CreateTime");
+
+                    b.Property<string>("CreateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("CreateUserId");
 
                     b.Property<int?>("OrderId");
 
                     b.Property<int?>("ReceiveState");
+
+                    b.Property<DateTime?>("ReceiveTime");
 
                     b.Property<string>("RefuseResion")
                         .HasMaxLength(500);
@@ -195,7 +230,10 @@ namespace OrderTask.Model.Migrations
 
                     b.Property<DateTime?>("UpdateTime");
 
-                    b.Property<string>("UpdateUser");
+                    b.Property<string>("UpdateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("UpdateUserId");
 
                     b.Property<int?>("UserInfoId");
 
@@ -231,9 +269,12 @@ namespace OrderTask.Model.Migrations
                     b.Property<string>("BtnUrl")
                         .HasMaxLength(300);
 
-                    b.Property<DateTime>("CreteTime");
+                    b.Property<DateTime>("CreateTime");
 
-                    b.Property<string>("CreteUser");
+                    b.Property<string>("CreateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("CreateUserId");
 
                     b.Property<string>("DisplayCondition")
                         .HasMaxLength(500);
@@ -256,7 +297,10 @@ namespace OrderTask.Model.Migrations
 
                     b.Property<DateTime?>("UpdateTime");
 
-                    b.Property<string>("UpdateUser");
+                    b.Property<string>("UpdateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("UpdateUserId");
 
                     b.HasKey("Id");
 
@@ -275,9 +319,12 @@ namespace OrderTask.Model.Migrations
 
                     b.Property<int>("ColumnType");
 
-                    b.Property<DateTime>("CreteTime");
+                    b.Property<DateTime>("CreateTime");
 
-                    b.Property<string>("CreteUser");
+                    b.Property<string>("CreateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("CreateUserId");
 
                     b.Property<string>("DataOptions")
                         .HasMaxLength(300);
@@ -307,7 +354,10 @@ namespace OrderTask.Model.Migrations
 
                     b.Property<DateTime?>("UpdateTime");
 
-                    b.Property<string>("UpdateUser");
+                    b.Property<string>("UpdateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("UpdateUserId");
 
                     b.HasKey("Id");
 
@@ -321,9 +371,12 @@ namespace OrderTask.Model.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("CreteTime");
+                    b.Property<DateTime>("CreateTime");
 
-                    b.Property<string>("CreteUser");
+                    b.Property<string>("CreateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("CreateUserId");
 
                     b.Property<string>("DptName")
                         .HasMaxLength(20);
@@ -341,7 +394,10 @@ namespace OrderTask.Model.Migrations
 
                     b.Property<DateTime?>("UpdateTime");
 
-                    b.Property<string>("UpdateUser");
+                    b.Property<string>("UpdateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("UpdateUserId");
 
                     b.HasKey("Id");
 
@@ -353,9 +409,12 @@ namespace OrderTask.Model.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("CreteTime");
+                    b.Property<DateTime>("CreateTime");
 
-                    b.Property<string>("CreteUser");
+                    b.Property<string>("CreateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("CreateUserId");
 
                     b.Property<bool>("IsActive");
 
@@ -380,7 +439,10 @@ namespace OrderTask.Model.Migrations
 
                     b.Property<DateTime?>("UpdateTime");
 
-                    b.Property<string>("UpdateUser");
+                    b.Property<string>("UpdateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("UpdateUserId");
 
                     b.HasKey("Id");
 
@@ -396,9 +458,12 @@ namespace OrderTask.Model.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("CreteTime");
+                    b.Property<DateTime>("CreateTime");
 
-                    b.Property<string>("CreteUser");
+                    b.Property<string>("CreateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("CreateUserId");
 
                     b.Property<string>("Describe")
                         .IsRequired()
@@ -415,7 +480,10 @@ namespace OrderTask.Model.Migrations
 
                     b.Property<DateTime?>("UpdateTime");
 
-                    b.Property<string>("UpdateUser");
+                    b.Property<string>("UpdateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("UpdateUserId");
 
                     b.HasKey("Id");
 
@@ -429,9 +497,12 @@ namespace OrderTask.Model.Migrations
 
                     b.Property<int>("ButtonId");
 
-                    b.Property<DateTime>("CreteTime");
+                    b.Property<DateTime>("CreateTime");
 
-                    b.Property<string>("CreteUser");
+                    b.Property<string>("CreateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("CreateUserId");
 
                     b.Property<int>("MentId");
 
@@ -444,7 +515,10 @@ namespace OrderTask.Model.Migrations
 
                     b.Property<DateTime?>("UpdateTime");
 
-                    b.Property<string>("UpdateUser");
+                    b.Property<string>("UpdateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("UpdateUserId");
 
                     b.HasKey("Id");
 
@@ -456,9 +530,12 @@ namespace OrderTask.Model.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("CreteTime");
+                    b.Property<DateTime>("CreateTime");
 
-                    b.Property<string>("CreteUser");
+                    b.Property<string>("CreateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("CreateUserId");
 
                     b.Property<bool>("IsActive");
 
@@ -477,7 +554,10 @@ namespace OrderTask.Model.Migrations
 
                     b.Property<DateTime?>("UpdateTime");
 
-                    b.Property<string>("UpdateUser");
+                    b.Property<string>("UpdateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("UpdateUserId");
 
                     b.HasKey("Id");
 
@@ -489,9 +569,12 @@ namespace OrderTask.Model.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("CreteTime");
+                    b.Property<DateTime>("CreateTime");
 
-                    b.Property<string>("CreteUser");
+                    b.Property<string>("CreateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("CreateUserId");
 
                     b.Property<bool>("IsActive");
 
@@ -512,7 +595,10 @@ namespace OrderTask.Model.Migrations
 
                     b.Property<DateTime?>("UpdateTime");
 
-                    b.Property<string>("UpdateUser");
+                    b.Property<string>("UpdateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("UpdateUserId");
 
                     b.HasKey("Id");
 
@@ -524,9 +610,12 @@ namespace OrderTask.Model.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("CreteTime");
+                    b.Property<DateTime>("CreateTime");
 
-                    b.Property<string>("CreteUser");
+                    b.Property<string>("CreateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("CreateUserId");
 
                     b.Property<int?>("DepartMentId");
 
@@ -570,7 +659,10 @@ namespace OrderTask.Model.Migrations
 
                     b.Property<DateTime?>("UpdateTime");
 
-                    b.Property<string>("UpdateUser");
+                    b.Property<string>("UpdateUser")
+                        .HasMaxLength(20);
+
+                    b.Property<int?>("UpdateUserId");
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -579,6 +671,12 @@ namespace OrderTask.Model.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DepartMentId");
+
+                    b.HasIndex("TrueName")
+                        .IsUnique();
+
+                    b.HasIndex("UserName")
+                        .IsUnique();
 
                     b.ToTable("t_sys_UserInfo");
                 });
@@ -605,6 +703,10 @@ namespace OrderTask.Model.Migrations
 
             modelBuilder.Entity("OrderTask.Model.DbModel.BisnessModel.OrderLog", b =>
                 {
+                    b.HasOne("OrderTask.Model.DbModel.UserInfo", "User")
+                        .WithMany()
+                        .HasForeignKey("Operator");
+
                     b.HasOne("OrderTask.Model.DbModel.BisnessModel.Order", "Order")
                         .WithMany()
                         .HasForeignKey("OrderId");

@@ -33,7 +33,7 @@ namespace OrderTask.Model.DbModel
         /// 备注
         /// </summary>
         public string ReMark { get; set; }
-
+     
         public List<UserInfo> UserInfos { get; set; }
     }
 }

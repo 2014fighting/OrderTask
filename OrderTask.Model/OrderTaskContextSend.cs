@@ -64,12 +64,12 @@ namespace OrderTask.Model
         {
             return new List<RoleInfo>()
             {
-                new RoleInfo() { RoleName="经理",CreteTime = DateTime.Now,Describe ="部门经理"},
-                new RoleInfo() { RoleName="业务员",CreteTime = DateTime.Now,Describe ="业务员"},
-                new RoleInfo() { RoleName="组长",CreteTime = DateTime.Now,Describe ="组长"},
-                new RoleInfo() { RoleName="组员",CreteTime = DateTime.Now,Describe ="组员"},
-                new RoleInfo() { RoleName="系统管理员",CreteTime = DateTime.Now,Describe ="系统管理员"}
-                ,new RoleInfo() {RoleName="超级管理员",CreteTime = DateTime.Now,Describe ="超级管理员"}
+                new RoleInfo() { RoleName="经理",CreateTime = DateTime.Now,Describe ="部门经理"},
+                new RoleInfo() { RoleName="业务员",CreateTime = DateTime.Now,Describe ="业务员"},
+                new RoleInfo() { RoleName="组长",CreateTime = DateTime.Now,Describe ="组长"},
+                new RoleInfo() { RoleName="组员",CreateTime = DateTime.Now,Describe ="组员"},
+                new RoleInfo() { RoleName="系统管理员",CreateTime = DateTime.Now,Describe ="系统管理员"}
+                ,new RoleInfo() {RoleName="超级管理员",CreateTime = DateTime.Now,Describe ="超级管理员"}
             };
         }
 
@@ -77,11 +77,11 @@ namespace OrderTask.Model
         {
             return new List<DepartMent>()
             {
-                new DepartMent() { DptName= "技术部",CreteTime = DateTime.Now,IsActive =true,CreteUser ="wenqing",ParentId =0},
-                new DepartMent() { DptName= "销售部",CreteTime = DateTime.Now,IsActive =true,CreteUser ="wenqing",ParentId =0},
-                new DepartMent() { DptName= "设计部",CreteTime = DateTime.Now,IsActive =true,CreteUser ="wenqing",ParentId =0},
-                new DepartMent() { DptName= "技术部",CreteTime = DateTime.Now,IsActive =true,CreteUser ="wenqing",ParentId =0},
-                new DepartMent() { DptName= "业务部",CreteTime = DateTime.Now,IsActive =true,CreteUser ="wenqing",ParentId =0}
+                new DepartMent() { DptName= "技术部",CreateTime = DateTime.Now,IsActive =true,CreateUser = "wenqing",ParentId =0},
+                new DepartMent() { DptName= "销售部",CreateTime = DateTime.Now,IsActive =true,CreateUser ="wenqing",ParentId =0},
+                new DepartMent() { DptName= "设计部",CreateTime = DateTime.Now,IsActive =true,CreateUser ="wenqing",ParentId =0},
+                new DepartMent() { DptName= "技术部",CreateTime = DateTime.Now,IsActive =true,CreateUser ="wenqing",ParentId =0},
+                new DepartMent() { DptName= "业务部",CreateTime = DateTime.Now,IsActive =true,CreateUser ="wenqing",ParentId =0}
             };
         }
     }
