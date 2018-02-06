@@ -39,12 +39,12 @@ namespace OrderTask.Model
             {
                 new UserInfo() {Password = "123456", UserName = "wenqing",
                     PhoneNo = "15659284668", TrueName = "文清",Group="1"},
-                new UserInfo() {Password = "123456", UserName = "admin",
+                new UserInfo() {Password = "888888", UserName = "admin",
                     PhoneNo = "15659284668", TrueName = "管理员",Group="1"},
-                new UserInfo() {Password = "123456", UserName = "supadmin",
+                new UserInfo() {Password = "888888", UserName = "supadmin",
                     PhoneNo = "15659284668", TrueName = "超级管理员",Group="1"}
             };
-            for (int i = 1; i < 30; i++)
+            for (int i = 1; i <10; i++)
             {
                 rlist.Add(
                     new UserInfo()

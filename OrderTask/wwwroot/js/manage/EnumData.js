@@ -8,11 +8,12 @@
 
 
 var enumPost = [
-    { value: "1", text: "修图" },
-    { value: "2", text: "设计" },
-    { value: "3", text: "拍摄" },
-    { value: "4", text: "策划" }
+    { value: "1", text: "职员" },
+    { value: "2", text: "组长" },
+    { value: "3", text: "经理" },
+    { value: "4", text: "总经理" }
 ];
+
 
 var enumOrderType = [
     { value: "1", text: "修图" },

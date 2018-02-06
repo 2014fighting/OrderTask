@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,7 @@ using OrderTask.Web.Models.SearchModel;
 
 namespace OrderTask.Web.Controllers
 {
+    [Authorize]
     public class OrderController : BaseController
     {
         #region Constructor
@@ -124,7 +126,7 @@ namespace OrderTask.Web.Controllers
             res.Id = order.Id;
             res.OrderDescribe = order.OrderDescribe;
             ViewBag.ismanager = CurUserInfo.RoleList.Any(i => i.Contains("经理"));
-            ViewBag.isReceivePersion = order.ReceivePerson.Any(i => i.UserInfoId == CurUserInfo.UserId);
+            ViewBag.isReceivePersion = order.ReceivePerson.Any(i=>i.UserInfoId==CurUserInfo.UserId);
             ViewBag.ReceivePesions = string.Join(",", order.ReceivePerson.Select(i => i.UserInfoId));
             ViewBag.curuserid = CurUserInfo.UserId;
             return View(res);
@@ -191,7 +193,11 @@ namespace OrderTask.Web.Controllers
             {
                 result = result.Where(i => i.ReceivePerson.Any(x => x.UserInfoId==CurUserInfo.UserId));
             }
-             
+            else if (CurUserInfo.RoleList.Any(i => i != "经理" && !i.Contains("管理员") && i != "业务员"))
+            {
+                result = result.Where(i => i.ReceivePerson.Any(x => x.UserInfoId == CurUserInfo.UserId));
+            }
+
             if (!string.IsNullOrEmpty(order.OrderName))
                 result = result.Where(i => i.OrderName.Contains(order.OrderName));
             if (order.UserInfoId.HasValue)

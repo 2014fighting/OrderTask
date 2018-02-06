@@ -53,6 +53,22 @@ namespace OrderTask.Web.Controllers
         public IActionResult AddUser(UserInfoModel model)
         {
             var res = new MgResult();
+
+            var repoUser = _unitOfWork.GetRepository<UserInfo>();
+            var booAny1 = repoUser.GetEntities().Any(i => i.UserName == model.UserName );
+            var booAny2 = repoUser.GetEntities().Any(i => i.TrueName == model.TrueName);
+            if (booAny1)
+            {
+                res.Code = 555;
+                res.Msg = "用户名已存在！";
+                return Json(res);
+            }
+            if (booAny2)
+            {
+                res.Code = 555;
+                res.Msg = "真实姓名已经存在！";
+                return Json(res);
+            }
             //权限先写死
             if (!CurUserInfo.RoleList.Any(i => i == "部门经理" || i.Contains("管理员")))
             {
@@ -70,7 +86,6 @@ namespace OrderTask.Web.Controllers
             {
                 var user = _mapper.Map<UserInfo>(model);
 
-                var repoUser = _unitOfWork.GetRepository<UserInfo>();
                 user.UserRoles = new List<UserRole>();
                 model.UserRoles.ForEach(i =>
                 {
@@ -116,6 +131,7 @@ namespace OrderTask.Web.Controllers
                 temps += i.RoleId + ",";
             });
             ViewBag.Roles = temps.TrimEnd(',');
+            ViewBag.isManager = CurUserInfo.RoleList.Any(i =>i.Contains("管理员"));
             return View(_mapper.Map<UserInfoModel>(user));
         }
 
@@ -225,10 +241,10 @@ namespace OrderTask.Web.Controllers
         {
             var lisSelectGroup=new List<SelectGroup>();
             var represult = _unitOfWork.GetRepository<UserInfo>();
-           var result1= represult.GetEntities(i => i.Group != null).Select(i=>i.Group).Distinct().ToList();
+           var result1= represult.GetEntities(i => i.Group != null&&i.DepartMent.DptName=="设计部").Select(i=>i.Group).Distinct().ToList();
             result1.ForEach(i =>
             {
-                var tempuser = represult.GetEntities(x => x.Group == i).ProjectTo<SelectsModel>().ToList();
+                var tempuser = represult.GetEntities(x => x.Group == i&&x.DepartMent.DptName=="设计部").ProjectTo<SelectsModel>().ToList();
                 lisSelectGroup.Add(new SelectGroup(){Group =i, SelectsModel=tempuser});
             });
                //var result = _unitOfWork.GetRepository<UserInfo>()
@@ -241,7 +257,8 @@ namespace OrderTask.Web.Controllers
         public ActionResult GetReceivePesionList(int orderId)
         {
             var list=new List<ReceivePersonModel>();
-            var represult = _unitOfWork.GetRepository<ReceivePerson>().GetEntities(i => i.OrderId == orderId).Include(i=>i.User).ToList();
+            var represult = _unitOfWork.GetRepository<ReceivePerson>()
+                .GetEntities(i => i.OrderId == orderId).Include(i=>i.User).ToList();
             represult.ForEach(i =>
             {
                 list.Add(new ReceivePersonModel()

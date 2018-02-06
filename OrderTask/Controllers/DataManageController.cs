@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OrderTask.Model;
 using OrderTask.Model.DbModel.BisnessModel;
@@ -13,6 +14,7 @@ using OrderTask.Web.Models.Common;
 
 namespace OrderTask.Web.Controllers
 {
+    [Authorize]
     public class DataManageController : BaseController
     {
 

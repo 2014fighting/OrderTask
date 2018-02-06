@@ -143,7 +143,7 @@
                     console.info(checkStatus.data[0]);
                     layer.open({
                         type: 2,
-                        title: '新增用户信息',
+                        title: '编辑用户信息',
                         shadeClose: true,
                         //shade: false,
                         maxmin: true, //开启最大化最小化按钮
@@ -195,13 +195,13 @@
                 , cols: [[ //标题栏
                     { checkbox: true, LAY_CHECKED: false } //默认全选
                     , { field: 'Id', title: 'Id', width: 80, sort: true }
-                    , { field: 'UserName', title: '用户名', width: 220 }
+                    , { field: 'UserName', title: '用户名', width: 150 }
                     , { field: 'TrueName', title: '真实姓名', width: 150 }
-                    , { field: 'Password', title: '密码', width: 100 }
+                    //, { field: 'Password', title: '密码', width: 100 }
                     , { field: 'PhoneNo', title: '电话', width: 120 }
                     , { field: 'Group', title: '所属小组', width: 120, templet: '#groupTpl' }
-                    , { field: 'CreteTime', title: '创建时间', width: 180, sort: true }
                     , { field: 'CreateUser', title: '创建人', width: 180, sort: true }
+                    , { field: 'CreateTime', title: '创建时间', width: 180, sort: true }
                     , { fixed: 'right', width: 210, align: 'center', toolbar: '#barDemo' }
                 ]]
                 //, skin: 'row' //表格风格

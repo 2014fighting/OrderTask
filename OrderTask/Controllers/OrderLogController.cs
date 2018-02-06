@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OrderTask.Model.DbModel.BisnessModel;
@@ -14,6 +15,7 @@ using OrderTask.Web.Models.SearchModel;
 
 namespace OrderTask.Web.Controllers
 {
+    [Authorize]
     public class OrderLogController : Controller
     {
         #region Constructor
@@ -35,6 +37,10 @@ namespace OrderTask.Web.Controllers
             return View();
         }
 
+        public IActionResult OrderlogDetial()
+        {
+            return View();
+        }
  
         [HttpGet]
         public ActionResult GetOrderLog(OrderLogSearch model, int page = 1, int limit = 10)

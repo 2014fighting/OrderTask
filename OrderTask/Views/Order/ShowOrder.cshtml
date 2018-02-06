@@ -71,14 +71,14 @@
                 <textarea id="remarks"></textarea>
             </div>
             <table id="demo" lay-filter="test"></table>
-            
-            
-              
+
+
+
             <div class="layui-form-item">
                 @Html.TextAreaFor(i => i.OrderDescribe, new { placeholder = "订单详情" })
                 @*<blockquote class="layui-elem-quote layui-quote-nm">
-                    @Html.Raw(Model.OrderDescribe)
-                </blockquote>*@
+                        @Html.Raw(Model.OrderDescribe)
+                    </blockquote>*@
             </div>
             <script type="text/html" id="groupTpl">
                 {{# var res; enumGroup.forEach(function(item, index) { if(d.Group==item.value){ res= item.text;return; } }); }}
@@ -99,21 +99,21 @@
                 {{# } }}
             </script>
             @if (!ViewBag.isReceivePersion)
-    {
-        <a class="layui-btn layui-btn-disabled" id="btnReceive">确认接单</a>
-        <a class="layui-btn layui-btn-disabled" id="btnRefuse">拒绝接单</a>
-        <a class="layui-btn layui-btn-disabled" id="btnConfirm">确认完成</a>
-}
-else
-{
-        <a class="layui-btn" id="btnReceive">确认接单</a>
-        <a class="layui-btn" id="btnRefuse">拒绝接单</a>
-        <a class="layui-btn" id="btnConfirm">确认完成</a>
-}
+            {
+                <a class="layui-btn layui-btn-disabled" id="btnReceive">确认接单</a>
+                <a class="layui-btn layui-btn-disabled" id="btnRefuse">拒绝接单</a>
+                <a class="layui-btn layui-btn-disabled" id="btnConfirm">确认完成</a>
+            }
+            else
+            {
+                <a class="layui-btn" id="btnReceive">确认接单</a>
+                <a class="layui-btn" id="btnRefuse">拒绝接单</a>
+                <a class="layui-btn layui-btn-normal" id="btnConfirm">确认完成</a>
+            }
 
             <a class="layui-btn layui-btn-primary" onclick="parent.layer.close(index);">关闭</a>
             @*</div>
-        </div>*@
+                </div>*@
             <script type="text/html" id="barDemo">
                 {{# var a='@ViewBag.ismanager'; if(a!='False'){ }}
                 <a class="layui-btn layui-btn-xs" lay-event="ReSelect"><i class="layui-icon">&#xe642;</i>重新指派</a>
@@ -190,9 +190,15 @@ else
                     , { field: 'TrueName', title: '接单人', width:120 }
                     , { field: 'Group', title: '所属小组', width: 120, templet: '#groupTpl' }
                     , { field: 'ReceiveState', title: '接收状态', width: 150, templet: '#ReceiveStateTpl' }
-                    , { field: 'RefuseResion', title: '拒绝原因', width: 150}
-                    , { field: 'Remark', title: '完成信息', width: 120 }
-                    , { field: 'JobScheduling', title: '当前排期', width: 150 }
+                    , { field: 'RefuseResion', title: '拒绝原因', width: 140 }
+                    , { field: 'JobScheduling', title: '当前排期', width: 160}
+                    , {
+                        field: 'viewbtn', title: '完成信息', width: 120, templet: function (d) {
+                            if (d.Remark == null)
+                                return "";
+                            else
+                                return ' <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="setSign"><i class="layui-icon">&#xe615;</i>点击查看</a>';
+                        } }
                     , { fixed: 'right', width: 210, align: 'center', toolbar: '#barDemo' }
                 ]]
                 //, skin: 'row' //表格风格
@@ -242,14 +248,14 @@ else
                 });
 
             });
-         
+
             //确认完成
             $("#btnConfirm").on('click', function () {
                 if ('@ViewBag.isReceivePersion' == 'False') {
                     return;}
                 //清空选值
-                $('#remarks').val('');
-               
+                $('#remarks').text('');
+
                 layer.open({
                     type:1,
                     title: '请填写完成备份信息！',
@@ -269,7 +275,7 @@ else
                             { orderId: managecom.getUrlParam('Id'), remark: tempval },
                         function(data) {
                             if (data.Code === 0) {
-                                layer.closeAll();  
+                                layer.closeAll();
                                 layer.msg("操作成功！");
                                 tableIns.reload();
                             } else
@@ -280,7 +286,7 @@ else
                 var index =layedit.build('remarks', {
                     height:355//设置编辑器高度
                 });
-              
+
             });
 
 
@@ -290,7 +296,7 @@ else
                 //, type: 'datetime'
             });
             var editor = UE.getEditor('OrderDescribe');
-           
+
 
             //给radio 赋值
             $("input[name='Degree'][value=" +@Model.Degree+"]").attr("checked","checked");
@@ -337,7 +343,26 @@ else
                         }
                     });
                 }
+                if (layEvent ==="setSign") {
+                    layer.open({
+                        type:1,
+                        title: '请填写完成备份信息！',
+                        shadeClose: true,
+                        //shade: false,
+                        //btn: ['确认提交', '关闭'], //只是为了演示
+                        maxmin: true, //开启最大化最小化按钮
+                        area: ['800px', '500px'],
+                        content: $('#itemmk')
+                        
+                    });
+                    console.info(data.Remark);
+                    $("#remarks").text(data.Remark);
+                    var index =layedit.build('remarks', {
+                        height:355//设置编辑器高度
+                    });
+                }
             });
+ 
 
         });
 

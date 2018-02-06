@@ -86,7 +86,7 @@
                     , { field: 'OrderId', title: '订单编号', width: 100 }
                     , { field: 'OperationType', title: '操作类型', width:100 }
                     , { field: 'Describe', title: '内容', width:420 }
-                    , { field: 'CreteTime', title: '创建时间', width: 180, sort: true }
+                    , { field: 'CreateTime', title: '创建时间', width: 180, sort: true }
                     , { fixed: 'right', width: 210, align: 'center', toolbar: '#barDemo' }
                 ]]
                 //, skin: 'row' //表格风格
@@ -111,7 +111,7 @@
                         //shade: false,
                         maxmin: true, //开启最大化最小化按钮
                         area: ['893px', '600px'],
-                        content: '/UserInfo/EditUser/?Id=' + data.Id + '&type=2'
+                        content: '@Url.Action("OrderlogDetial")'
                     });
                 } 
            

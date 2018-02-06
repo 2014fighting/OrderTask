@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OrderTask.Model.DbModel;
 using OrderTask.Service.ServiceInterface;
@@ -12,6 +13,7 @@ using OrderTask.Web.Models.Common;
 
 namespace OrderTask.Web.Controllers
 {
+    [Authorize]
     public class DepartMentController : BaseController
     {
 

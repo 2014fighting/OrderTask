@@ -9,7 +9,7 @@ namespace OrderTask.Web.Models
     {
         public int? Id { get; set; }
 
-        public DateTime CreteTime { get; set; }
+        public DateTime CreateTime { get; set; }
 
         /// <summary>
         /// 操作人
