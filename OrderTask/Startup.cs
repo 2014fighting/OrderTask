@@ -67,6 +67,12 @@ namespace OrderTask.Web
                 {
                     o.LoginPath = new PathString("/Account/Login");
                     o.AccessDeniedPath = new PathString("/Account/AccessDenied");
+                    o.Events = new CookieAuthenticationEvents()
+                    {
+                        OnRedirectToLogin = (context) => {
+                            return context.Response.WriteAsync("<script>window.top.location.href ='/Account/Login'</script>");
+                        }
+                    };
                 });
 
             services.AddAutoMapper();//配置autoapper

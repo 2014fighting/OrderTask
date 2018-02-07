@@ -16,42 +16,57 @@ namespace OrderTask.Model.DbModel.BisnessModel
         public string ProductNum { get; set; }
 
         /// <summary>
-        /// 拍摄图地址
+        /// 白底图
         /// </summary>
         [MaxLength(300)]
-        public string ShotMapAddress { get; set; }
+        public string BaidiAddress { get; set; }
         /// <summary>
-        /// 上脚图地址
+        /// 场景图
         /// </summary>
         [MaxLength(300)]
-        public string FootMapAddress { get; set; }
-
-        /// <summary>
-        /// 精修图地址
-        /// </summary>
-        [MaxLength(300)]
-        public string RuingMapAddress { get; set; }
+        public string ChangjingAddress { get; set; }
 
         /// <summary>
-        /// 设计图地址
+        /// 套脚图
         /// </summary>
         [MaxLength(300)]
-        public string DesignMapAddress { get; set; }
+        public string TaojiaoAddress { get; set; }
 
+        /// <summary>
+        /// 模特图
+        /// </summary>
         [MaxLength(300)]
-        public string PictureAddress1 { get; set; }
+        public string MoteAddress { get; set; }
 
+        /// <summary>
+        /// 详情页
+        /// </summary>
         [MaxLength(300)]
-        public string PictureAddress2 { get; set; }
+        public string XiangxiAddress { get; set; }
 
+        /// <summary>
+        /// 专辑页
+        /// </summary>
         [MaxLength(300)]
-        public string PictureAddress3 { get; set; }
+        public string ZhuantiAddress { get; set; }
 
+        /// <summary>
+        /// 标准图
+        /// </summary>
         [MaxLength(300)]
-        public string PictureAddress4 { get; set; }
+        public string BiaozhunAddress { get; set; }
 
+        /// <summary>
+        /// 广告图
+        /// </summary>
         [MaxLength(300)]
-        public string PictureAddress5 { get; set; }
+        public string GuanggaoAddress { get; set; }
+
+        /// <summary>
+        /// 入口图
+        /// </summary>
+        [MaxLength(300)]
+        public string RukouAddress { get; set; }
 
 
         [MaxLength(300)]

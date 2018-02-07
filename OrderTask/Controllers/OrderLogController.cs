@@ -37,7 +37,7 @@ namespace OrderTask.Web.Controllers
             return View();
         }
 
-        public IActionResult OrderlogDetial()
+        public IActionResult OrderlogDetail()
         {
             return View();
         }
