@@ -34,7 +34,7 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="LAY-user-login-submit">登 入</button>
+                <button class="layui-btn layui-btn-fluid" id="btnlogin" lay-submit lay-filter="LAY-user-login-submit">登 入</button>
             </div>
             <div class="layui-form-item layadmin-user-login-other">
                 <label>社交账号登入</label>
@@ -71,17 +71,20 @@
 
         //提交
         form.on('submit(LAY-user-login-submit)', function (obj) {
+            $("#btnlogin").text("正在登入....");
             console.info(obj.field);
-
-            $.post('@Url.Action("Login")',
+            setTimeout(function () {
+                $.post('@Url.Action("Login")',
                 obj.field,
                 function(data) {
-                    if (data.Code ===0) {
+                    if (data.Code === 0) {
                         location.href = '@Url.Action("Index","Home")';
                     } else {
                         layer.msg(data.Msg);
+                        $("#btnlogin").text("登入");
                     }
-                });
+                });}, 500);
+
         });
 
 
