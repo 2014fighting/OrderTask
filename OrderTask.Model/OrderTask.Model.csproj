@@ -15,6 +15,8 @@
     <Compile Include="Migrations\20180205082531_vicky.Designer.cs" />
     <Compile Include="Migrations\20180207082144_vicky1.cs" />
     <Compile Include="Migrations\20180207082144_vicky1.Designer.cs" />
+    <Compile Include="Migrations\20180210025401_vicky2.cs" />
+    <Compile Include="Migrations\20180210025401_vicky2.Designer.cs" />
     <Compile Include="Migrations\OrderTaskContextModelSnapshot.cs" />
   </ItemGroup>
 

@@ -120,7 +120,7 @@
                 {{# } else { }}
                 <a class="layui-btn layui-btn-xs layui-btn-disabled" lay-event="ReSelect"><i class="layui-icon">&#xe642;</i>重新指派</a>
                 {{# } }}
-                <a class="layui-btn layui-btn-danger layui-btn-xs" id="btnEvaluate"><i class="layui-icon">&#xe630;</i>评分</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" id="btnEvaluate" lay-event="Evaluate"><i class="layui-icon">&#xe630;</i>评分</a>
             </script>
         </div>
 
@@ -359,6 +359,18 @@
                     $("#remarks").text(data.Remark);
                     var index =layedit.build('remarks', {
                         height:355//设置编辑器高度
+                    });
+                }
+                if (layEvent === "Evaluate") {
+                    layer.open({
+                        type: 2,
+                        title: '对接单人进行评价',
+                        shadeClose: true,
+                        //shade: false,
+                        maxmin: true, //开启最大化最小化按钮
+                        area: ['800px', '500px'],
+
+                        content: '@Url.Action("AddEvaluate", "Evaluate")'
                     });
                 }
             });

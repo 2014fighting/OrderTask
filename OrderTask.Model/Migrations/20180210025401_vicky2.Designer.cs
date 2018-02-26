@@ -11,9 +11,10 @@ using System;
 namespace OrderTask.Model.Migrations
 {
     [DbContext(typeof(OrderTaskContext))]
-    partial class OrderTaskContextModelSnapshot : ModelSnapshot
+    [Migration("20180210025401_vicky2")]
+    partial class vicky2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

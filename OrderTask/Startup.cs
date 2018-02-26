@@ -69,9 +69,7 @@ namespace OrderTask.Web
                     o.AccessDeniedPath = new PathString("/Account/AccessDenied");
                     o.Events = new CookieAuthenticationEvents()
                     {
-                        OnRedirectToLogin = (context) => {
-                            return context.Response.WriteAsync("<script>window.top.location.href ='/Account/Login'</script>");
-                        }
+                        OnRedirectToLogin = (context) => context.Response.WriteAsync("<script>window.top.location.href ='/Account/Login'</script>")
                     };
                 });
 

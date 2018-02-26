@@ -1,31 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace OrderTask.Model.DbModel.BisnessModel
+namespace OrderTask.Web.Models
 {
-    [Table("t_Evaluate")]
-    public class Evaluate : BaseEntity<int>
+    public class EvaluateModel
     {
 
+        public int? Id { get; set; }
         public int? OrderId { get; set; }
-        [ForeignKey("OrderId")]
-        public Order Order { get; set; }
-
+ 
         /// <summary>
         /// 接单人
         /// </summary>
         public int? ReceivePersonId { get; set; }
-        [ForeignKey("ReceivePersonId")]
-        public ReceivePerson ReceivePerson { get; set; }
+ 
 
         /// <summary>
         /// 评价
         /// </summary>
         public string EvaluateInfo { get; set; }
 
-    
+
         /// <summary>
         /// 工作进度
         /// </summary>
@@ -40,6 +37,5 @@ namespace OrderTask.Model.DbModel.BisnessModel
         /// 作品满意度
         /// </summary>
         public float? Satisfaction { get; set; }
-        
     }
 }

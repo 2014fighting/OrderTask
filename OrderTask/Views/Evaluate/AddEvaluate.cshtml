@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewData["Title"] = "AddEvaluate";
+}
+<div class="layui-container">
+    <form class="layui-form layui-form-pane" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">工作进度</label>
+            <div class="layui-input-block">
+                <input type="number" name="WorkProgress" lay-verify="required" autocomplete="off" placeholder="请输入1-100之间分值" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">沟通效率</label>
+            <div class="layui-input-block">
+                <input type="number" name="Communication" lay-verify="" autocomplete="off" placeholder="请输入1-100之间分值" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">作品满意度</label>
+            <div class="layui-input-block">
+                <input type="number" name="Satisfaction" lay-verify="" autocomplete="off" class="layui-input" placeholder="请输入1-100之间分值">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">评价详情</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入内容" name="EvaluateInfo" id="EvaluateInfo" class="layui-textarea"></textarea>
+            </div>
+        </div>
+           
+          
+        <a class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</a>
+        <a class="layui-btn layui-btn-primary" onclick="parent.layer.close(index);">关闭</a>
+        
+    </form>
+</div>
+
+<script type="text/javascript">
+    //注意：parent 是 JS 自带的全局对象，可用于操作父页面
+    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+      layui.use(['form', 'layedit','table', 'layer','laydate','manageCom'],
+        function () {
+
+            var form = layui.form,
+                layer = layui.layer;
+        
+
+            //监听提交
+            form.on('submit(demo1)', function (data) {
+                 
+                //自定义验证规则
+                form.verify({
+
+                });
+
+                $.post('@Url.Action("AddEvaluate")',
+                    data.field,
+                    function (data) {
+                        if (data.Code === 0) {
+                            parent.layer.msg("添加成功！：" + data.Msg);
+                            parent.layer.close(index);
+                            parent.tableIns.reload();
+                        }
+                        else
+                            layer.msg("保存失败：" + data.Msg);
+                    });
+                return false;
+            });
+
+
+        });
+
+
+</script>
