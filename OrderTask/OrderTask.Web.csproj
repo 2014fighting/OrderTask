@@ -24,6 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\lib\raty\demo\js\jquery.min.js" />
+    <None Include="wwwroot\lib\raty\jquery插件库.url" />
+    <None Include="wwwroot\lib\raty\lib\jquery.raty.js" />
+    <None Include="wwwroot\lib\raty\lib\jquery.raty.min.js" />
     <None Include="wwwroot\lib\UEditor\net\net.sln" />
   </ItemGroup>
 

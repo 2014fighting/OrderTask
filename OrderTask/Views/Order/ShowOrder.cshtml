@@ -369,8 +369,7 @@
                         //shade: false,
                         maxmin: true, //开启最大化最小化按钮
                         area: ['800px', '500px'],
-
-                        content: '@Url.Action("AddEvaluate", "Evaluate")'
+                        content: '@Url.Action("AddEvaluate", "Evaluate")?Id=' + data.Id + '&orderId=' + managecom.getUrlParam("Id")
                     });
                 }
             });

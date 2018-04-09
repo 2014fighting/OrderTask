@@ -2,53 +2,119 @@
 @{
     ViewData["Title"] = "AddEvaluate";
 }
+@using OrderTask.Web.Models
+@model OrderTask.Web.Models.EvaluateModel
+<script type="text/javascript" src="/lib/raty/lib/jquery.raty.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.layui-btn.layui-btn-disabled').attr("disabled", "disabled");
+        $.fn.raty.defaults.path = '/lib/raty/lib/img';
+        console.info(@Model.Id);
+    
+            $('#WorkProgress').raty({
+                size: 24,
+                score: '@Model.WorkProgress',
+                starHalf: 'star-half-big.png',
+                starOff: 'star-off-big.png',
+                starOn: 'star-on-big.png'
+            });
+            $('#Communication').raty({
+                size: 24,
+                score: '@Model.Communication',
+                starHalf: 'star-half-big.png',
+                starOff: 'star-off-big.png',
+                starOn: 'star-on-big.png'
+            });
+            $('#Satisfaction').raty({
+                size: 24,
+                score: '@Model.Satisfaction',
+                starHalf: 'star-half-big.png',
+                starOff: 'star-off-big.png',
+                starOn: 'star-on-big.png'
+            });
+       
+      
+    });
+ 
+</script>
+<style>
+    .star {
+        padding-top: 8px;
+        padding-left: 20px;
+    }
+
+    #hint1 {
+        float: left
+    }
+</style>
 <div class="layui-container">
     <form class="layui-form layui-form-pane" action="">
         <div class="layui-form-item">
             <label class="layui-form-label">工作进度</label>
             <div class="layui-input-block">
-                <input type="number" name="WorkProgress" lay-verify="required" autocomplete="off" placeholder="请输入1-100之间分值" class="layui-input">
+                <div class="star" id="WorkProgress"></div>
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">沟通效率</label>
             <div class="layui-input-block">
-                <input type="number" name="Communication" lay-verify="" autocomplete="off" placeholder="请输入1-100之间分值" class="layui-input">
+                <div class="star" id="Communication"></div>
+                @*<input type="number" name="Communication" lay-verify="" autocomplete="off" placeholder="请输入1-100之间分值" class="layui-input">*@
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">作品满意度</label>
             <div class="layui-input-block">
-                <input type="number" name="Satisfaction" lay-verify="" autocomplete="off" class="layui-input" placeholder="请输入1-100之间分值">
+                <div class="star" id="Satisfaction"></div>
+                @*<input type="number" name="Satisfaction" lay-verify="" autocomplete="off" class="layui-input" placeholder="请输入1-100之间分值">*@
             </div>
         </div>
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">评价详情</label>
             <div class="layui-input-block">
-                <textarea placeholder="请输入内容" name="EvaluateInfo" id="EvaluateInfo" class="layui-textarea"></textarea>
+                <textarea placeholder="请输入内容" name="EvaluateInfo"
+                          id="EvaluateInfo" class="layui-textarea">@Model.EvaluateInfo</textarea>
             </div>
         </div>
-           
-          
-        <a class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</a>
-        <a class="layui-btn layui-btn-primary" onclick="parent.layer.close(index);">关闭</a>
-        
+
+        @if (Model.Id == null)
+        {
+            <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+            <button class="layui-btn layui-btn-primary" onclick="parent.layer.close(index);">关闭</button>
+        }
+        else
+        {<button class="layui-btn layui-btn-disabled" lay-submit="" lay-filter="demo1">立即提交</button>
+            <button class="layui-btn layui-btn-primary" onclick="parent.layer.close(index);">关闭</button>}
+
+
     </form>
 </div>
 
 <script type="text/javascript">
     //注意：parent 是 JS 自带的全局对象，可用于操作父页面
     var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-      layui.use(['form', 'layedit','table', 'layer','laydate','manageCom'],
+    layui.use(['form', 'layedit','table', 'layer','laydate','manageCom'],
         function () {
 
             var form = layui.form,
-                layer = layui.layer;
-        
+                layer = layui.layer,
+                managecom = layui.manageCom;
 
             //监听提交
             form.on('submit(demo1)', function (data) {
-                 
+                data.field.WorkProgress = $("#WorkProgress").raty('getScore');
+                data.field.Communication = $("#Communication").raty('getScore');
+                data.field.Satisfaction = $("#Satisfaction").raty('getScore');
+                data.field.ReceivePersonId = managecom.getUrlParam("Id");
+
+                if (data.field.WorkProgress == undefined) {
+                    layer.alert("请对工作进度进行评价~"); return false;
+                } if (data.field.Communication == undefined) {
+                    layer.alert("请对工作效率进行评价~"); return false;
+                } if (data.field.Satisfaction == undefined) {
+                    layer.alert("请对工作满意度进行评价~"); return false;
+                }
+
                 //自定义验证规则
                 form.verify({
 
@@ -58,12 +124,12 @@
                     data.field,
                     function (data) {
                         if (data.Code === 0) {
-                            parent.layer.msg("添加成功！：" + data.Msg);
+                            parent.layer.msg("评论成功！：" + data.Msg);
                             parent.layer.close(index);
                             parent.tableIns.reload();
                         }
                         else
-                            layer.msg("保存失败：" + data.Msg);
+                            layer.msg("保存评论失败：" + data.Msg);
                     });
                 return false;
             });
