@@ -63,5 +63,10 @@ namespace OrderTask.Model.DbModel.BisnessModel
         /// </summary>
         public List<ReceivePerson> ReceivePerson { get; set; }
 
+        /// <summary>
+        /// 最晚接单时间
+        /// </summary>
+        public DateTime? LastReceiveTiem { get; set; }
+
     }
 }

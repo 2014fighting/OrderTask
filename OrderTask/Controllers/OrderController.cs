@@ -41,6 +41,8 @@ namespace OrderTask.Web.Controllers
         #endregion
         public IActionResult Index()
         {
+            var x = _orderService.CaculateAutoTime(DateTime.Parse("2018-04-17 07:30"));
+
             return View();
         }
 
@@ -61,7 +63,8 @@ namespace OrderTask.Web.Controllers
             order.OrderState = 1;
             order.CreateUser = CurUserInfo.TrueName;
             order.CreateUserId = CurUserInfo.UserId;
-
+            //最晚接单时间
+            order.LastReceiveTiem=_orderService.CaculateAutoTime(order.CreateTime, 2);
             var receivePerson = new List<ReceivePerson>();
             model.ReceivePersons.ForEach(i =>
             {

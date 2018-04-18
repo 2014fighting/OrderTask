@@ -152,9 +152,10 @@ namespace OrderTask.Web.Controllers
                 res.Msg = "后端验证不通过！";
                 return Json(res);
             }
-      
-            var user = _unitOfWork.GetRepository<UserInfo>().GetEntities().Include(i => i.UserRoles)
+            var repoUser = _unitOfWork.GetRepository<UserInfo>();
+            var user = repoUser.GetEntities().Include(i => i.UserRoles)
                 .FirstOrDefault(i => i.Id == model.Id);
+        
             if (user == null)
             {
                 res.Code = 120;
@@ -219,7 +220,7 @@ namespace OrderTask.Web.Controllers
         {
             var res = new MgResult();
              //权限先写死
-            if (!CurUserInfo.RoleList.Any(i => i == "部门经理" || i.Contains("管理员")))
+            if (!CurUserInfo.RoleList.Any(i =>i.Contains("管理员")))
             {
                 res.Code = 999;
                 res.Msg = "您没有权限操作！";

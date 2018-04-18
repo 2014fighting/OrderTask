@@ -11,9 +11,10 @@ using System;
 namespace OrderTask.Model.Migrations
 {
     [DbContext(typeof(OrderTaskContext))]
-    partial class OrderTaskContextModelSnapshot : ModelSnapshot
+    [Migration("20180416072304_vicky3")]
+    partial class vicky3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -176,8 +177,6 @@ namespace OrderTask.Model.Migrations
                     b.Property<DateTime?>("ExpectTime");
 
                     b.Property<string>("FinishDescribe");
-
-                    b.Property<DateTime?>("LastReceiveTiem");
 
                     b.Property<string>("OrderDescribe");
 

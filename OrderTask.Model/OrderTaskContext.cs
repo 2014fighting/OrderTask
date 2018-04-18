@@ -32,6 +32,7 @@ namespace OrderTask.Model
         public DbSet<OrderType> OrderType { get; set; }
         public DbSet<ReceivePerson> ReceivePerson { get; set; }
         public DbSet<Evaluate> Evaluate { get; set; }
+        public DbSet<Holiday> Holiday { get; set; }
 
         public OrderTaskContext(DbContextOptions<OrderTaskContext> options) : base(options)
         {

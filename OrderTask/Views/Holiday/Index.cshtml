@@ -1,0 +1,164 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<form class="layui-form" action="">
+    <fieldset class="layui-elem-field comfield" style="margin: 0">
+        <div style="float: left">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">节假日</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="Desc" id="Desc" lay-verify="" placeholder="请输入描述" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div style="float: left">
+                <button class="layui-btn layui-btn-sm layui-btn-normal layui-btn-radius" lay-submit=""
+                        lay-filter="demo1">
+                    <span class="layui-icon">
+                        &#xe615;
+                    </span>查询
+                </button>
+                <button type="reset" class="layui-btn layui-btn-sm layui-btn-normal layui-btn-radius">
+                    <span class="layui-icon">
+                        &#xe639;
+                    </span>重置
+                </button>
+            </div>
+</fieldset>
+</form>
+<div class="layui-btn-group mytool">
+    <button class="layui-btn layui-btn-normal layui-btn-sm" id="btnadd"><i class="layui-icon">&#xe654;</i>新增</button>
+    <button class="layui-btn layui-btn-sm" id="btnBulid"><i class="layui-icon">&#x1002;</i>自动生成</button>
+    <button class="layui-btn layui-btn-danger layui-btn-sm" id="btndel"><i class="layui-icon">&#xe640;</i>删除</button>
+</div>
+
+<table id="demo" lay-filter="test"></table>
+ 
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon">&#xe640;</i>删除</a>
+</script>
+
+<script type="text/javascript">
+ 
+    ; layui.use(['form', 'layedit', 'laydate', 'table', 'layer', 'manageCom'],
+        function () {
+
+            var form = layui.form
+                , layer = layui.layer
+                , laydate = layui.laydate
+                , manage = layui.manageCom
+                , table = layui.table;
+      
+
+            //日期
+            laydate.render({
+                elem: '#HolidayTime'
+                , type: 'datetime'
+            });
+
+            //监听提交
+            form.on('submit(demo1)', function (data) {
+                tableIns.reload({
+                    where: data.field
+                    , page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                });
+
+                return false;
+            });
+
+            $("#btnadd").on('click',
+                function () {
+                    layer.open({
+                        type: 2,
+                        title: '新增用户信息',
+                        shadeClose: true,
+                        //shade: false,
+                        maxmin: true, //开启最大化最小化按钮
+                        area: ['893px', '600px'],
+                        content: '/UserInfo/AddUser")'
+                    });
+                });
+            $("#btnBulid").on('click',
+                function () {
+                    layer.confirm('确认重新生成今年内所有节假日？', {
+                        btn: ['确认','我后悔了'] //按钮
+                    }, function(){
+                        $.get('@Url.Action("HolidayBulid")',
+                            function(data) {
+                                if (data.Code === 0) {
+                                    layer.msg("重新生成假期成功！");
+                                    tableIns.reload();
+                                } else
+                                    layer.msg("生成失败！：" + data.Msg);
+                            });
+                    }, function () {
+                        //后悔了
+                    });
+                });
+            
+            $("#btndel").on('click',
+                function () {
+                    var checkStatus = table.checkStatus('demo');
+                    var checkdata = checkStatus.data;
+                    if (checkdata.length == 0) {
+                        layer.msg("请选择要删除的数据支持批量删除！");
+                        return;
+                    }
+                    layer.confirm('真的要删??', function (index) {
+                        var postdata = [];
+                        checkdata.forEach(function (value) {
+                            postdata.push(value.Id);
+                        });
+                         
+                        $.ajax({
+                            type: "post",
+                            url: '/UserInfo/UserDelete',
+                            data: { ids: postdata },
+                            success: function (data) {
+                                console.info(data);
+                                if (data.Code === 0) {
+                                    layer.msg("删除成功！!");
+                                    //obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                                    tableIns.reload();
+                                } else {
+                                    layer.msg(data.Msg);
+                                }
+                            }
+                        });
+                        layer.close(index);
+                        //向服务端发送删除指令
+
+                    });
+                });
+            //展示已知数据
+            tableIns = table.render({
+                elem: '#demo',
+                url: '@Url.Action("GetHoliday")'
+                , height: manage.getHeight()
+                , cols: [[ //标题栏
+                    { checkbox: true, LAY_CHECKED: false } //默认全选
+                    , { field: 'Id', title: 'Id', width: 80, sort: true }
+                    , { field: 'HolidayTime', title: '节假日', width: 180 }
+                    , { field: 'Desc', title: '描述', width: 150 }
+                    , { field: 'CreateUser', title: '创建人', width: 180, sort: true }
+                    , { field: 'CreateTime', title: '创建时间', width: 180, sort: true }
+                    , { fixed: 'right', width: 210, align: 'center', toolbar: '#barDemo' }
+                ]]
+                //, skin: 'row' //表格风格
+                , even: false
+                , page: true //是否显示分页
+                , limits: [5, 7, 10, 100]
+                , limit: 10 //每页默认显示的数量
+                , loading: true
+            });
+ 
+        });
+
+</script>

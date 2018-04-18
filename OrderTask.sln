@@ -1,17 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2026
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderTask.Web", "OrderTask\OrderTask.Web.csproj", "{2D9D6B8A-E283-48FF-880C-AA017DBB7D15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderTask.UnitOfWork", "OrderTask.UnitOfWork\OrderTask.UnitOfWork.csproj", "{7202C980-90B1-41E7-BFE4-C10350B8C409}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderTask.UnitOfWork", "OrderTask.UnitOfWork\OrderTask.UnitOfWork.csproj", "{7202C980-90B1-41E7-BFE4-C10350B8C409}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderTask.Model", "OrderTask.Model\OrderTask.Model.csproj", "{38ABE6D6-9078-414F-BC6E-8DCF13234C70}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderTask.Model", "OrderTask.Model\OrderTask.Model.csproj", "{38ABE6D6-9078-414F-BC6E-8DCF13234C70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderTask.Service", "OrderTask.Service\OrderTask.Service.csproj", "{E9A44D5D-EC8F-4385-862F-15814A03B475}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderTask.Service", "OrderTask.Service\OrderTask.Service.csproj", "{E9A44D5D-EC8F-4385-862F-15814A03B475}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderTask.Common", "OrderTask.Common\OrderTask.Common.csproj", "{28F067C6-6D9C-4A7B-8CC2-94CF0B36CA0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderTask.Common", "OrderTask.Common\OrderTask.Common.csproj", "{28F067C6-6D9C-4A7B-8CC2-94CF0B36CA0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderTask.Test", "OrderTask.Test\OrderTask.Test.csproj", "{A119D857-23EB-4B6E-99C3-809CFCA1A253}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{28F067C6-6D9C-4A7B-8CC2-94CF0B36CA0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28F067C6-6D9C-4A7B-8CC2-94CF0B36CA0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28F067C6-6D9C-4A7B-8CC2-94CF0B36CA0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A119D857-23EB-4B6E-99C3-809CFCA1A253}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A119D857-23EB-4B6E-99C3-809CFCA1A253}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A119D857-23EB-4B6E-99C3-809CFCA1A253}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A119D857-23EB-4B6E-99C3-809CFCA1A253}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

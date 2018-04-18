@@ -9,5 +9,7 @@ namespace OrderTask.Service.ServiceInterface
         bool IsComplete(int orderId);
 
         bool IsExistRefuse(int orderId,int curReceiveId);
+
+        DateTime CaculateAutoTime(DateTime dateTime,int t=2);
     }
 }
