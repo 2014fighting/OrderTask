@@ -46,44 +46,116 @@ namespace OrderTask.Web.Controllers
         [HttpGet]
         public ActionResult HolidayBulid()
         {
-            var result = new MgResult();
-            //https://blog.csdn.net/xinit1/article/details/72833988
-            var holidayRep = _unitOfWork.GetRepository<Holiday>();
-            var listH = new List<Holiday>();
-            var curDate = DateTime.Now;
-            var year =curDate.Year;
-            for (DateTime dt = new DateTime(year, 1, 1); dt < new DateTime(year+1, 1, 1); dt = dt.AddDays(1))
+            try
             {
-                var t = dt.ToString("yyyyMMdd");
-                 
-                var url = $"http://api.goseek.cn/Tools/holiday?date={t}";
-                var getRs = url.GetPostPage().JsonConvert<ResultHolidy>();
-                if (dt.DayOfWeek.ToString() != "Saturday" && getRs.data != 0)
+                var result = new MgResult();
+                //https://blog.csdn.net/xinit1/article/details/72833988
+                var holidayRep = _unitOfWork.GetRepository<Holiday>();
+                var listH = new List<Holiday>();
+                var curDate = DateTime.Now;
+                var year = curDate.Year;
+                for (DateTime dt = new DateTime(year, 1, 1); dt < new DateTime(year + 1, 1, 1); dt = dt.AddDays(1))
                 {
-                   if(getRs.data==2)
-                       listH.Add(new Holiday() {Desc ="节假日",
-                           HolidayTime =DateTime.Parse(dt.ToString("yyyy-MM-dd"))
-                           ,CreateTime = DateTime.Now,CreateUser = CurUserInfo.UserName,CreateUserId = CurUserInfo.UserId
-                       });
-                   else
-                   {
-                       listH.Add(new Holiday()
-                       {
-                           Desc = "周日",
-                           HolidayTime = DateTime.Parse(dt.ToString("yyyy-MM-dd"))
-                           ,
-                           CreateTime = DateTime.Now,
-                           CreateUser = CurUserInfo.UserName,
-                           CreateUserId = CurUserInfo.UserId
-                       });
+                    var t = dt.ToString("yyyyMMdd");
+                    if (holidayRep.GetEntities().Any(i => i.HolidayTime.Value.Year
+                     == dt.Year && i.HolidayTime.Value.Day == dt.Day
+                     && i.HolidayTime.Value.Month == dt.Month))
+                        continue;
+
+                    var url = $"http://api.goseek.cn/Tools/holiday?date={t}";
+                    var getRs = url.GetPostPage().JsonConvert<ResultHolidy>();
+                    if (dt.DayOfWeek.ToString() != "Saturday" && getRs.data != 0)
+                    {
+                        if (getRs.data == 2)
+                            listH.Add(new Holiday()
+                            {
+                                Desc = "节假日",
+                                HolidayTime = DateTime.Parse(dt.ToString("yyyy-MM-dd"))
+                                ,
+                                CreateTime = DateTime.Now,
+                                CreateUser = CurUserInfo.UserName,
+                                CreateUserId = CurUserInfo.UserId
+                            });
+                        else
+                        {
+                            listH.Add(new Holiday()
+                            {
+                                Desc = "周日",
+                                HolidayTime = DateTime.Parse(dt.ToString("yyyy-MM-dd"))
+                                ,
+                                CreateTime = DateTime.Now,
+                                CreateUser = CurUserInfo.UserName,
+                                CreateUserId = CurUserInfo.UserId
+                            });
+                        }
                     }
                 }
+                if (listH.Count == 0)
+                {
+                    result.Code = 2;
+                    result.Msg = "没有符合的日期";
+                    return Json(result);
+                }
+                holidayRep.Insert(listH);
+                var r = _unitOfWork.SaveChanges();
+                result.SetResult(r);
+                return Json(result);
             }
-             holidayRep.Insert(listH);
-            var r=_unitOfWork.SaveChanges();
+            catch (Exception e)
+            {
+                _logger.Error("生成日期报错~",e);
+                throw;
+            }
+           
+        }
+
+        [HttpGet]
+        public ActionResult HolidayAdd()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult HolidayAdd(DateTime holidayTime ,string desc)
+        {
+            var result = new MgResult();
+            var holidayRep = _unitOfWork.GetRepository<Holiday>();
+            if (holidayRep.GetEntities().Any(i => i.HolidayTime.Value.Year
+                                                  == holidayTime.Year && i.HolidayTime.Value.Day == holidayTime.Day
+                                                  && i.HolidayTime.Value.Month == holidayTime.Month))
+            {
+                result.Msg = "该日期已存在！";
+                result.Code = 2;
+                return Json(result);
+            }
+
+            holidayRep.Insert(new Holiday()
+            {
+                Desc =desc,HolidayTime =holidayTime,CreateTime = DateTime.Now
+                ,CreateUser =CurUserInfo.UserName,CreateUserId =CurUserInfo.UserId
+            });
+             
+                var r = _unitOfWork.SaveChanges();
             result.SetResult(r);
             return Json(result);
         }
 
+
+        [HttpPost]
+        public ActionResult HolidayDelete(List<int> ids)
+        {
+            var result = _unitOfWork.GetRepository<Holiday>();
+            ids.ForEach(i =>
+            {
+                result.Delete(result.Find(i));
+            });
+            var r = _unitOfWork.SaveChanges() > 0;
+
+            return Json(new MgResult
+            {
+                Code = r ? 0 : 1,
+                Msg = r ? "ok" : "SaveChanges失败！"
+            });
+        }
     }
 }

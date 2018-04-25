@@ -41,52 +41,59 @@ namespace OrderTask.Web.Controllers
         #endregion
         public IActionResult Index()
         {
-            var x = _orderService.CaculateAutoTime(DateTime.Parse("2018-04-17 07:30"));
-
             return View();
         }
 
         [HttpPost]
         public IActionResult AddOrder(OrderModel model)
         {
-            var res = new MgResult();
-            if (!ModelState.IsValid)
+            try
             {
-                res.Code = 110;
-                res.Msg = "后端模型验证失败！";
+                var res = new MgResult();
+                if (!ModelState.IsValid)
+                {
+                    res.Code = 110;
+                    res.Msg = "后端模型验证失败！";
+                    return Json(res);
+                }
+                var order = _mapper.Map<Order>(model);
+
+                order.UserInfoId = CurUserInfo.UserId;
+                order.CreateTime = DateTime.Now;
+                order.OrderState = 1;
+                order.CreateUser = CurUserInfo.TrueName;
+                order.CreateUserId = CurUserInfo.UserId;
+                //最晚接单时间
+                order.LastReceiveTiem = _orderService.CaculateAutoTime(order.CreateTime, 2);
+                var receivePerson = new List<ReceivePerson>();
+                model.ReceivePersons.ForEach(i =>
+                {
+                    receivePerson.Add(new ReceivePerson()
+                    {
+                        CreateTime = DateTime.Now,
+                        CreateUser = CurUserInfo.TrueName
+                        ,
+                        ReceiveState = 1,
+                        UserInfoId = i
+                    });
+                });
+                order.ReceivePerson = receivePerson;
+                order.OrderTypeIds = string.Join(",", model.OrderTypeIds);
+                var repoOrder = _unitOfWork.GetRepository<Order>();
+
+                repoOrder.Insert(order);
+                var r = _unitOfWork.SaveChanges();
+
+                res.Code = r > 0 ? 0 : 1;
+                res.Msg = r > 0 ? "ok" : "SaveChanges失败！";
                 return Json(res);
             }
-            var order = _mapper.Map<Order>(model);
-
-            order.UserInfoId = CurUserInfo.UserId;
-            order.CreateTime = DateTime.Now;
-            order.OrderState = 1;
-            order.CreateUser = CurUserInfo.TrueName;
-            order.CreateUserId = CurUserInfo.UserId;
-            //最晚接单时间
-            order.LastReceiveTiem=_orderService.CaculateAutoTime(order.CreateTime, 2);
-            var receivePerson = new List<ReceivePerson>();
-            model.ReceivePersons.ForEach(i =>
+            catch (Exception e)
             {
-                receivePerson.Add(new ReceivePerson()
-                {
-                    CreateTime = DateTime.Now,
-                    CreateUser = CurUserInfo.TrueName
-                    ,
-                    ReceiveState = 1,
-                    UserInfoId = i
-                });
-            });
-            order.ReceivePerson = receivePerson;
-            order.OrderTypeIds = string.Join(",", model.OrderTypeIds);
-            var repoOrder = _unitOfWork.GetRepository<Order>();
-
-            repoOrder.Insert(order);
-            var r = _unitOfWork.SaveChanges();
-
-            res.Code = r > 0 ? 0 : 1;
-            res.Msg = r > 0 ? "ok" : "SaveChanges失败！";
-            return Json(res);
+                _logger.Error("派单报错~",e);
+                throw;
+            }
+          
         }
 
         [HttpGet]
@@ -132,6 +139,7 @@ namespace OrderTask.Web.Controllers
             ViewBag.isReceivePersion = order.ReceivePerson.Any(i=>i.UserInfoId==CurUserInfo.UserId);
             ViewBag.ReceivePesions = string.Join(",", order.ReceivePerson.Select(i => i.UserInfoId));
             ViewBag.curuserid = CurUserInfo.UserId;
+            ViewBag.isCreater = order.CreateUserId == CurUserInfo.UserId;
             return View(res);
         }
 
@@ -403,6 +411,7 @@ namespace OrderTask.Web.Controllers
                 //判断所有接单人是否都完成 若都完成才能吧订单状态改成已完成
                 if (_orderService.IsComplete(orderId))
                 {
+                    order.ComplateTime=DateTime.Now;
                      order.OrderState = 3;//已完成
                     _orderLogService.AddOrderLog(orderId, EnumOrderLogType.ChangeOrderstate
                         , CurUserInfo, "确认完成订单.同时更新订单状态为已完成！！");

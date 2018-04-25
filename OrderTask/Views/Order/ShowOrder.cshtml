@@ -120,7 +120,12 @@
                 {{# } else { }}
                 <a class="layui-btn layui-btn-xs layui-btn-disabled" lay-event="ReSelect"><i class="layui-icon">&#xe642;</i>重新指派</a>
                 {{# } }}
-                <a class="layui-btn layui-btn-danger layui-btn-xs" id="btnEvaluate" lay-event="Evaluate"><i class="layui-icon">&#xe630;</i>评分</a>
+                {{# var a='@ViewBag.isCreater'; if(a!='False'){ }}
+                <a class="layui-btn layui-btn-danger layui-btn-xs"  lay-event="Evaluate"><i class="layui-icon">&#xe630;</i>评分</a>
+                {{# } else { }}
+                <a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-disabled" lay-event="Evaluate"><i class="layui-icon">&#xe630;</i>评分</a>
+                {{# } }}
+
             </script>
         </div>
 
@@ -353,7 +358,7 @@
                         maxmin: true, //开启最大化最小化按钮
                         area: ['800px', '500px'],
                         content: $('#itemmk')
-                        
+
                     });
                     console.info(data.Remark);
                     $("#remarks").text(data.Remark);
@@ -362,6 +367,9 @@
                     });
                 }
                 if (layEvent === "Evaluate") {
+                    if ('@ViewBag.isCreater' == 'False') {
+                        return;
+                    }
                     layer.open({
                         type: 2,
                         title: '对接单人进行评价',
@@ -373,7 +381,7 @@
                     });
                 }
             });
- 
+
 
         });
 

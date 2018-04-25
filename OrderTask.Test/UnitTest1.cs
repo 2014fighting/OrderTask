@@ -23,6 +23,9 @@ namespace OrderTask.Test
         [Fact]
         public void Test2()
         {
+            
+            float f = -123.576f;
+            int w = (int)f;
             var result = _orderService.CaculateAutoTime(DateTime.Parse("2018-04-18  02:20"), 2);
         }
         [Fact]
@@ -54,6 +57,13 @@ namespace OrderTask.Test
             {
                 Console.WriteLine(dt.ToString("yy-MM-dd"));
             }
+        }
+        [Fact]
+        public void TestBase()
+        {
+            float f = -123.576f;
+            int w = (int)f;
+
         }
 
 

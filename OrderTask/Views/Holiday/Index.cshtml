@@ -9,7 +9,7 @@
         <div style="float: left">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">节假日</label>
+                    <label class="layui-form-label">描述</label>
                     <div class="layui-input-inline">
                         <input type="text" name="Desc" id="Desc" lay-verify="" placeholder="请输入描述" class="layui-input">
                     </div>
@@ -73,36 +73,42 @@
                 return false;
             });
 
-            $("#btnadd").on('click',
-                function () {
-                    layer.open({
-                        type: 2,
-                        title: '新增用户信息',
-                        shadeClose: true,
-                        //shade: false,
-                        maxmin: true, //开启最大化最小化按钮
-                        area: ['893px', '600px'],
-                        content: '/UserInfo/AddUser")'
-                    });
-                });
+   
             $("#btnBulid").on('click',
                 function () {
                     layer.confirm('确认重新生成今年内所有节假日？', {
                         btn: ['确认','我后悔了'] //按钮
-                    }, function(){
+                    }, function () {
+                        var index = layer.load(1, {
+                            shade: [0.9,'#fff'] //0.1透明度的白色背景
+                        });
                         $.get('@Url.Action("HolidayBulid")',
                             function(data) {
                                 if (data.Code === 0) {
                                     layer.msg("重新生成假期成功！");
+                                    layer.close(index);
                                     tableIns.reload();
-                                } else
-                                    layer.msg("生成失败！：" + data.Msg);
+                                } else {layer.msg("生成失败！：" + data.Msg);
+                                    layer.close(index);}
+                                    
                             });
                     }, function () {
                         //后悔了
                     });
                 });
-            
+                  $("#btnadd").on('click',
+                function () {
+                    var  perContent =layer.open({
+                        type: 2,
+                        title: '新增设置',
+                        shadeClose: true,
+                        //shade: false,
+                        maxmin: true, //开启最大化最小化按钮
+                        area: ['850px', '460px'],
+                        content: '@Url.Action("HolidayAdd")'
+                    });
+                   // layer.full(perContent);
+                });
             $("#btndel").on('click',
                 function () {
                     var checkStatus = table.checkStatus('demo');
@@ -119,7 +125,7 @@
                          
                         $.ajax({
                             type: "post",
-                            url: '/UserInfo/UserDelete',
+                            url: '@Url.Action("HolidayDelete")',
                             data: { ids: postdata },
                             success: function (data) {
                                 console.info(data);
@@ -158,7 +164,37 @@
                 , limit: 10 //每页默认显示的数量
                 , loading: true
             });
- 
-        });
+            table.on('tool(test)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                var tr = obj.tr; //获得当前行 tr 的DOM对象
 
+                if (layEvent === 'del') { //删除
+                    layer.confirm('真的要删??', function (index) {
+                        var postdata = [];
+                        postdata.push(data.Id);
+                        $.ajax({
+                            type: "post",
+                            url: '@Url.Action("HolidayDelete")',
+                            data: { ids: postdata },
+                            success: function (data) {
+                                console.info(data);
+                                if (data.Code === 0) {
+                                    layer.msg("删除成功！!");
+                                    //obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                                    tableIns.reload();
+                                } else {
+                                    layer.msg(data.Msg);
+                                }
+                            }
+                        });
+                        layer.close(index);
+                        //向服务端发送删除指令
+
+                    });
+         
+                } 
+            });
+        });
+  
 </script>
