@@ -7,6 +7,7 @@ namespace OrderTask.Web.Models.SearchModel
 {
     public class OrderSearch
     {
+        public int? OrderId { get; set; }
         public string OrderName { get; set; }
         public int? UserInfoId { get; set; }
     }

@@ -36,6 +36,8 @@ namespace OrderTask.Web.Controllers
             var temp=new EvaluateModel();
             var evaluate = _unitOfWork.GetRepository<Evaluate>()
                 .GetFirstOrDefault(i=>i.OrderId==orderId&&i.ReceivePersonId==id);
+            var order = _unitOfWork.GetRepository<Order>().Find(orderId);
+            ViewBag.isCreater = order.CreateUserId == CurUserInfo.UserId;
             if (evaluate != null)
             {
                 temp.Communication = evaluate.Communication;

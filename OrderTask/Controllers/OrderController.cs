@@ -139,7 +139,7 @@ namespace OrderTask.Web.Controllers
             ViewBag.isReceivePersion = order.ReceivePerson.Any(i=>i.UserInfoId==CurUserInfo.UserId);
             ViewBag.ReceivePesions = string.Join(",", order.ReceivePerson.Select(i => i.UserInfoId));
             ViewBag.curuserid = CurUserInfo.UserId;
-            ViewBag.isCreater = order.CreateUserId == CurUserInfo.UserId;
+          
             return View(res);
         }
 
@@ -198,16 +198,18 @@ namespace OrderTask.Web.Controllers
                 .ThenInclude(w => w.User).AsQueryable();
             if (CurUserInfo.RoleList.Any(i => i == "组长"))
             {
-                result= result.Where(i => i.ReceivePerson.Any(x => x.User.Group == user.Group));
+                result= result.Where(i => i.ReceivePerson.Any(x => x.User.Group == user.Group)||i.CreateUserId==CurUserInfo.UserId);
             }
             else if(CurUserInfo.RoleList.Any(i => i == "组员"))
             {
-                result = result.Where(i => i.ReceivePerson.Any(x => x.UserInfoId==CurUserInfo.UserId));
+                result = result.Where(i => i.ReceivePerson.Any(x => x.UserInfoId==CurUserInfo.UserId)||i.CreateUserId==CurUserInfo.UserId);
             }
             else if (CurUserInfo.RoleList.Any(i => i != "经理" && !i.Contains("管理员") && i != "业务员"))
             {
-                result = result.Where(i => i.ReceivePerson.Any(x => x.UserInfoId == CurUserInfo.UserId));
+                result = result.Where(i => i.ReceivePerson.Any(x => x.UserInfoId == CurUserInfo.UserId) || i.CreateUserId == CurUserInfo.UserId);
             }
+            if (order.OrderId.HasValue)
+                result = result.Where(i => i.Id==order.OrderId);
 
             if (!string.IsNullOrEmpty(order.OrderName))
                 result = result.Where(i => i.OrderName.Contains(order.OrderName));
