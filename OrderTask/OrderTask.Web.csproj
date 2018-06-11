@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Views\DataManage\AddDataManage.cshtml~RF14c9c99f.TMP" />
     <None Remove="Views\Order\EditOrder.cshtml~RFf7afc98.TMP" />
   </ItemGroup>
 

@@ -58,6 +58,6 @@ namespace OrderTask.Web.Models
 
         public string CreteUser { get; set; }
 
-
+        public string StrNumber { get; set; }
     }
 }

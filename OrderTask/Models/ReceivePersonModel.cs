@@ -15,6 +15,7 @@ namespace OrderTask.Web.Models
         public DateTime? JobScheduling { get; set; } = DateTime.Now;
         public string Group { get; set; }
         public int? UserId { get; set; }
+        public int TotalCount { get; set; }
 
         /// <summary>
         /// 同意或拒绝备注

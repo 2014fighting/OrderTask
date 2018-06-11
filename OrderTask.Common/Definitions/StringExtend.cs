@@ -21,5 +21,26 @@ namespace OrderTask.Common.Definitions
             }
             return str;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static int ToInt(this object obj)
+        {
+            if (obj != null)
+            {
+                if (obj.Equals(DBNull.Value))
+                {
+                    return 0;
+                }
+                if (int.TryParse(obj.ToString(), out var num))
+                {
+                    return num;
+                }
+            }
+            return 0;
+        }
     }
 }

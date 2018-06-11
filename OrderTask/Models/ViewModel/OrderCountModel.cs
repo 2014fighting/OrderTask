@@ -16,4 +16,15 @@ namespace OrderTask.Web.Models.ViewModel
         public int ReceiveCount { get; set; } = 0;
 
     }
+
+
+    public class ReceiverPersionModel
+    {
+        public int TotalCount { get; set; } = 0;
+
+        public string TrueName { get; set; }
+
+        public int? Id { get; set; }
+ 
+    }
 }

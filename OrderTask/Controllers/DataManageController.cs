@@ -11,6 +11,7 @@ using OrderTask.Service.ServiceInterface;
 using OrderTask.UnitOfWork;
 using OrderTask.Web.Models;
 using OrderTask.Web.Models.Common;
+using OrderTask.Web.Models.SearchModel;
 
 namespace OrderTask.Web.Controllers
 {
@@ -43,6 +44,35 @@ namespace OrderTask.Web.Controllers
         public IActionResult AddDataManage(DataManageModel model)
         {
             var res = new MgResult();
+
+            var order = _unitOfWork.GetRepository<Order>().Find(model.OrderId);
+            if (order == null)
+            {
+                res.Code = 120;
+                res.Msg = $"{model.OrderId}该订单不存在,请重新输入！";
+                return Json(res);
+            }
+
+            var receivePerson = _unitOfWork.GetRepository<ReceivePerson>()
+                .GetEntities(i => i.OrderId == model.OrderId && i.UserInfoId == CurUserInfo.UserId).FirstOrDefault();
+            if (receivePerson == null)
+            {
+                res.Code = 1;
+                res.Msg = "您不是该订单的接单人,不允许保存订单资料库！";
+                return Json(res);
+            }
+            var orderCount = receivePerson.TotalCount;
+            var dataMange = _unitOfWork.GetRepository<DataManage>().GetEntities();
+            var curCount = dataMange.Where(i => i.OrderId == model.OrderId
+                                                && i.CreateUserId == CurUserInfo.UserId).Sum(i=>i.Count);
+
+            if (curCount + model.Count > orderCount)
+            {
+                res.Code = 2;
+                res.Msg = $"{ model.OrderId}该订单您应完成总数{orderCount},已经完成{curCount},现有数量{ model.Count}已超标！";
+                return Json(res);
+            }
+           
             if (!ModelState.IsValid)
             {
                 res.Code = 110;
@@ -89,6 +119,28 @@ namespace OrderTask.Web.Controllers
         public IActionResult EditDataManage(DataManageModel model)
         {
             var res = new MgResult();
+
+            var receivePerson = _unitOfWork.GetRepository<ReceivePerson>()
+                .GetEntities(i => i.OrderId == model.OrderId && i.UserInfoId == CurUserInfo.UserId).FirstOrDefault();
+            if (receivePerson == null)
+            {
+                res.Code =1;
+                res.Msg = "您不是该订单的接单人,不允许保存订单资料库！";
+                return Json(res);
+            }
+            var orderCount = receivePerson.TotalCount;
+            var dataMange = _unitOfWork.GetRepository<DataManage>().GetEntities();
+            var curCount = dataMange.Where(i => i.OrderId == model.OrderId
+                                                && i.CreateUserId == CurUserInfo.UserId
+                                                &&i.Id!=model.Id)
+                .Sum(i => i.Count);
+
+            if (curCount + model.Count > orderCount)
+            {
+                res.Code = 2;
+                res.Msg = $"{ model.OrderId}该订单您应完成总数{orderCount},已经完成{curCount},现有数量{ model.Count}已超标！";
+                return Json(res);
+            }
             if (!ModelState.IsValid)
             {
                 res.Code = 110;
@@ -115,12 +167,12 @@ namespace OrderTask.Web.Controllers
             return Json(res);
         }
         [HttpGet]
-        public ActionResult GetDataManage(DataManageModel dataManage, int page = 1, int limit = 10)
+        public ActionResult GetDataManage(DataManageSearch dataManage)
         {
             var result = _unitOfWork.GetRepository<DataManage>().GetEntities();
             if (!string.IsNullOrEmpty(dataManage.ProductNum))
                 result = result.Where(i => i.ProductNum.Contains(dataManage.ProductNum));
-            var w1 = result.OrderByDescending(x => x.Id).Skip((page - 1) * limit).Take(limit);
+            var w1 = result.OrderByDescending(x => x.Id).Skip((dataManage.page - 1) * dataManage.limit).Take(dataManage.limit);
             return Json(new
             {
                 code = 0,
@@ -147,6 +199,7 @@ namespace OrderTask.Web.Controllers
                 Msg = r ? "ok" : "SaveChanges失败！"
             });
         }
+ 
 
     }
 }

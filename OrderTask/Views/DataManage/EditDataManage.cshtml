@@ -9,7 +9,12 @@
         温馨提示商品资料提交完成后记得去确认完成您的订单任务噢！
     </blockquote>
     <form class="layui-form layui-form-pane" action="">
-
+        <div class="layui-form-item">
+            <label class="layui-form-label">订单编号</label>
+            <div class="layui-input-block">
+                <input type="text" name="OrderId" value="@Model.OrderId" lay-verify="required" autocomplete="off" placeholder="请输入订单编号" class="layui-input">
+            </div>
+        </div>
         <div class="layui-form-item">
             <label class="layui-form-label">款号</label>
             <div class="layui-input-block">
@@ -17,71 +22,35 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">白底图</label>
-            <div class="layui-input-block">
-                <input type="text" name="BaidiAddress" value="@Model.BaidiAddress" lay-verify="required" autocomplete="off" placeholder="请输入白底图地址" class="layui-input">
+            <label class="layui-form-label">资料类型</label>
+            <div class="layui-input-block layui-form" lay-filter="DataType_select">
+                <select name="DataType" lay-verify="" lay-search="">
+                    <option value="">直接选择或搜索选择</option>
+                </select>
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">场景图</label>
+            <label class="layui-form-label">完成数量</label>
             <div class="layui-input-block">
-                <input type="tel" name="ChangjingAddress" value="@Model.ChangjingAddress" lay-verify="required" autocomplete="off" class="layui-input" placeholder="请输入场景图地址">
+                <input type="text" name="Count" value="@Model.Count" lay-verify="required" autocomplete="off" placeholder="请输入完成数量" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">套脚图</label>
+            <label class="layui-form-label">资料路径</label>
             <div class="layui-input-block">
-                <input type="text" name="TaojiaoAddress" lay-verify="required" value="@Model.TaojiaoAddress" autocomplete="off" placeholder="请输入套脚图地址" class="layui-input">
-            </div>
-        </div> 
-        <div class="layui-form-item">
-            <label class="layui-form-label">模特图</label>
-            <div class="layui-input-block">
-                <input type="text" name="MoteAddress" value="@Model.MoteAddress"  lay-verify="" autocomplete="off" placeholder="请输入模特图地址" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">详情页</label>
-            <div class="layui-input-block">
-                <input type="text" name="XiangxiAddress" lay-verify="required" value="@Model.XiangxiAddress" autocomplete="off" placeholder="请输入详情页地址" class="layui-input">
-            </div>
-        </div>
-
-        <div class="layui-form-item">
-            <label class="layui-form-label">专辑页</label>
-            <div class="layui-input-block">
-                <input type="text" name="ZhuantiAddress" lay-verify="required" value="@Model.ZhuantiAddress" autocomplete="off" placeholder="请输入专辑页地址" class="layui-input">
-            </div>
-        </div>
-
-        <div class="layui-form-item">
-            <label class="layui-form-label">标准图</label>
-            <div class="layui-input-block">
-                <input type="text" name="BiaozhunAddress" lay-verify="required" value="@Model.BiaozhunAddress" autocomplete="off" placeholder="请输入标准图地址" class="layui-input">
-            </div>
-        </div>
-
-        <div class="layui-form-item">
-            <label class="layui-form-label">广告图</label>
-            <div class="layui-input-block">
-                <input type="text" name="GuanggaoAddress" lay-verify="required" value="@Model.GuanggaoAddress" autocomplete="off" placeholder="请输入广告图地址" class="layui-input">
-            </div>
-        </div>
-
-        <div class="layui-form-item">
-            <label class="layui-form-label">入口图</label>
-            <div class="layui-input-block">
-                <input type="text" name="RukouAddress" lay-verify="required" value="@Model.RukouAddress" autocomplete="off" placeholder="请输入入口图地址" class="layui-input">
+                <input type="text" name="DataAddress" value="@Model.DataAddress" lay-verify="" autocomplete="off" placeholder="请输入地址" class="layui-input">
             </div>
         </div>
 
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">备注信息</label>
             <div class="layui-input-block">
-                <textarea placeholder="请输入内容" name="Remark" id="Remark" class="layui-textarea"></textarea>
+                <textarea placeholder="请输入内容" name="Remark" value="@Model.Remark" id="Remark" class="layui-textarea"></textarea>
             </div>
         </div>
-        <button class="layui-btn" lay-submit="" lay-filter="demo1">提交保存</button>
+        @if (ViewBag.pageType == 1)
+    {<button class="layui-btn" lay-submit="" lay-filter="demo1">提交保存</button>}
+      
         <button class="layui-btn layui-btn-primary" onclick="parent.layer.close(index);">关闭</button>
 
     </form>
@@ -98,9 +67,13 @@
 
             var form = layui.form, layer = layui.layer, managecom = layui.manageCom;
 
+
+
+            managecom.selectInint('DataType', enumDataType,'@Model.DataType');
+            form.render('select', 'DataType_select');
+
             //监听提交
             form.on('submit(demo1)', function (data) {
-
                 //自定义验证规则
                 form.verify({
 

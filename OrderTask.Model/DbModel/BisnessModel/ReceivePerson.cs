@@ -44,5 +44,10 @@ namespace OrderTask.Model.DbModel.BisnessModel
         [ForeignKey("OrderId")]
         public Order Order { get; set; }
 
+        /// <summary>
+        /// 完成总数
+        /// </summary>
+        public int TotalCount { get; set; } = 0;
+
     }
 }

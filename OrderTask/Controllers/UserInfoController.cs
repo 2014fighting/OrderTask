@@ -252,8 +252,7 @@ namespace OrderTask.Web.Controllers
                // .GetEntities().ProjectTo<SelectsModel>();
             return Json(lisSelectGroup.ToList());
         }
-
-
+         
         [HttpGet]
         public ActionResult GetReceivePesionList(int orderId)
         {
@@ -268,7 +267,8 @@ namespace OrderTask.Web.Controllers
                     ,JobScheduling =i.User.JobScheduling,
                     RefuseResion =i.RefuseResion,ReceiveState =i.ReceiveState,
                     Remark = i.Remark,TrueName = i.User.TrueName,
-                    UserId=i.User.Id
+                    UserId=i.User.Id,TotalCount =i.TotalCount
+                    
                 });
             });
             return Json(new

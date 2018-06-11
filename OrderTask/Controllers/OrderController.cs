@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using OrderTask.Common.Definitions;
 using OrderTask.Common.Enum;
 using OrderTask.Model.DbModel;
 using OrderTask.Model.DbModel.BisnessModel;
@@ -16,6 +17,7 @@ using OrderTask.UnitOfWork;
 using OrderTask.Web.Models;
 using OrderTask.Web.Models.Common;
 using OrderTask.Web.Models.SearchModel;
+using OrderTask.Web.Models.ViewModel;
 
 namespace OrderTask.Web.Controllers
 {
@@ -57,7 +59,12 @@ namespace OrderTask.Web.Controllers
                     return Json(res);
                 }
                 var order = _mapper.Map<Order>(model);
-
+                var dicnum = new Dictionary<int, int>();
+                foreach (var s in model.StrNumber.Split('|'))
+                {
+                    dicnum.Add(s.Split(',')[0].ToInt(), s.Split(',')[1].ToInt());
+                }
+               
                 order.UserInfoId = CurUserInfo.UserId;
                 order.CreateTime = DateTime.Now;
                 order.OrderState = 1;
@@ -68,12 +75,13 @@ namespace OrderTask.Web.Controllers
                 var receivePerson = new List<ReceivePerson>();
                 model.ReceivePersons.ForEach(i =>
                 {
+                     dicnum.TryGetValue(i, out int tempv);
                     receivePerson.Add(new ReceivePerson()
                     {
                         CreateTime = DateTime.Now,
-                        CreateUser = CurUserInfo.TrueName
-                        ,
+                        CreateUser = CurUserInfo.TrueName,
                         ReceiveState = 1,
+                        TotalCount = tempv,
                         UserInfoId = i
                     });
                 });
@@ -119,8 +127,6 @@ namespace OrderTask.Web.Controllers
             res.OrderDescribe = order.OrderDescribe;
             ViewBag.ismanager = CurUserInfo.RoleList.Any(i => i.Contains("经理"));
             ViewBag.ReceivePesions = string.Join(",", order.ReceivePerson.Select(i => i.UserInfoId));
- 
-
             return View(res);
         }
 
@@ -166,7 +172,11 @@ namespace OrderTask.Web.Controllers
                 res.Msg = "只有该订单的派单人才允许修改！";
                 return Json(res);
             }
-           
+            var dicnum = new Dictionary<int, int>();
+            foreach (var s in model.StrNumber.Split('|'))
+            {
+                dicnum.Add(s.Split(',')[0].ToInt(), s.Split(',')[1].ToInt());
+            }
             order.Degree = model.Degree;order.ExpectTime = model.ExpectTime;
             order.UpdateTime=DateTime.Now;
             order.OrderName = model.OrderName;
@@ -178,7 +188,13 @@ namespace OrderTask.Web.Controllers
             var lisRp = new List<ReceivePerson>();
             model.ReceivePersons.ForEach(i =>
             {
-                lisRp.Add(new ReceivePerson(){UserInfoId =i,ReceiveState =1,CreateTime = DateTime.Now,OrderId =model.Id});
+                dicnum.TryGetValue(i, out int tempv);
+                lisRp.Add(new ReceivePerson(){UserInfoId =i,
+                    ReceiveState =1,
+                    CreateTime = DateTime.Now,
+                    OrderId =model.Id
+                   ,TotalCount = tempv
+                });
             });
             order.ReceivePerson = lisRp;
             order.OrderTypeIds = string.Join(",", model.OrderTypeIds.ToArray());
@@ -463,5 +479,39 @@ namespace OrderTask.Web.Controllers
             result.Msg = r > 0 ? "ok" : "SaveChanges失败！";
             return Json(result);
         }
+
+        /// <summary>
+        /// strIds   
+        /// </summary>
+        /// <param name="strIds"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult GetReceiverInfo(List<int> strIds)
+        {
+            var users = _unitOfWork.GetRepository<UserInfo>().GetEntities(i => strIds.Contains(i.Id)).ToList();
+            return Json(users);
+        }
+
+        [HttpPost]
+        public ActionResult GetCuruentReceiverInfo(int id)
+        {
+            var order = _unitOfWork.GetRepository<Order>()
+                .GetEntities().Include(i => i.ReceivePerson).ThenInclude(x=>x.User)
+                .FirstOrDefault(i => i.Id == id);
+            if (order == null)
+                throw new Exception("e");
+            var res= new List<ReceiverPersionModel>();
+            order.ReceivePerson.ForEach(i =>
+            {
+                res.Add(new ReceiverPersionModel()
+                {
+                    Id=i.UserInfoId,
+                    TrueName =i.User.TrueName,
+                    TotalCount =i.TotalCount
+                });
+            });
+            return Json(res);
+        }
+        
     }
 }

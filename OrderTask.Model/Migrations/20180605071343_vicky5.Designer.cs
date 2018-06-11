@@ -11,9 +11,10 @@ using System;
 namespace OrderTask.Model.Migrations
 {
     [DbContext(typeof(OrderTaskContext))]
-    partial class OrderTaskContextModelSnapshot : ModelSnapshot
+    [Migration("20180605071343_vicky5")]
+    partial class vicky5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,7 +26,13 @@ namespace OrderTask.Model.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("Count")
+                    b.Property<string>("BaidiAddress")
+                        .HasMaxLength(300);
+
+                    b.Property<string>("BiaozhunAddress")
+                        .HasMaxLength(300);
+
+                    b.Property<string>("ChangjingAddress")
                         .HasMaxLength(300);
 
                     b.Property<DateTime>("CreateTime");
@@ -35,13 +42,11 @@ namespace OrderTask.Model.Migrations
 
                     b.Property<int?>("CreateUserId");
 
-                    b.Property<string>("DataAddress")
+                    b.Property<string>("GuanggaoAddress")
                         .HasMaxLength(300);
 
-                    b.Property<int>("DataType")
+                    b.Property<string>("MoteAddress")
                         .HasMaxLength(300);
-
-                    b.Property<int>("OrderId");
 
                     b.Property<string>("ProductNum")
                         .HasMaxLength(200);
@@ -52,6 +57,12 @@ namespace OrderTask.Model.Migrations
                     b.Property<DateTime>("RowVersion")
                         .IsConcurrencyToken();
 
+                    b.Property<string>("RukouAddress")
+                        .HasMaxLength(300);
+
+                    b.Property<string>("TaojiaoAddress")
+                        .HasMaxLength(300);
+
                     b.Property<DateTime?>("UpdateTime");
 
                     b.Property<string>("UpdateUser")
@@ -59,9 +70,13 @@ namespace OrderTask.Model.Migrations
 
                     b.Property<int?>("UpdateUserId");
 
-                    b.HasKey("Id");
+                    b.Property<string>("XiangxiAddress")
+                        .HasMaxLength(300);
 
-                    b.HasIndex("OrderId");
+                    b.Property<string>("ZhuantiAddress")
+                        .HasMaxLength(300);
+
+                    b.HasKey("Id");
 
                     b.ToTable("t_DataManage");
                 });
@@ -756,14 +771,6 @@ namespace OrderTask.Model.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("t_sys_UserRole");
-                });
-
-            modelBuilder.Entity("OrderTask.Model.DbModel.BisnessModel.DataManage", b =>
-                {
-                    b.HasOne("OrderTask.Model.DbModel.BisnessModel.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("OrderTask.Model.DbModel.BisnessModel.Evaluate", b =>

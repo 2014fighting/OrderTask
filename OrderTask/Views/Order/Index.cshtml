@@ -137,7 +137,7 @@
                    });
                     layer.full(perContent);
                 });
-            function editPage(id) {
+            function editPage(data) {
                 var perContent=layer.open({
                     type: 2,
                     title: '编辑订单',
@@ -145,7 +145,7 @@
                     shade: false,
                     maxmin: false, //开启最大化最小化按钮
                     area: ['893px', '600px'],
-                    content: '@Url.Action("EditOrder")/' + id
+                    content: '@Url.Action("EditOrder")?Id=' + data.Id 
                 });
                 layer.full(perContent);
             }
@@ -267,7 +267,7 @@
                 } else if (layEvent === 'del') { //取消
                     deletePost([{ Id: data.Id}]);
                 } else if (layEvent === 'edit') { //编辑
-                    editPage(data.Id);
+                    editPage(data);
                 }
             });
 

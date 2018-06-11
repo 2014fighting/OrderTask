@@ -58,7 +58,10 @@
                     <select class="selectpicker" name="ReceivePersons" id="ReceivePersons" data-live-search="true" multiple="multiple" lay-ignore></select>
                 </div>
             </div>
+            <div class="layui-form-item" id="divnumberbox">
+             
 
+            </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">订单详情</label>
                 <div class="layui-input-block">
@@ -153,8 +156,60 @@
                 $('#ReceivePersons').selectpicker('render');
             });
 
+            $.post('@Url.Action("GetCuruentReceiverInfo")',
+                { id: managecom.getUrlParam("id")},
+                function (data) {
+                    console.info(data);
+                    var str = "";
+                    $("#divnumberbox").html("");
+                    data.forEach(function(g, index) {
+                        str+= '<div class="layui-inline">' +
+                            '<label class="layui-form-label">' + g.TrueName+'</label>' +
+                            '<div class="layui-input-block">' +
+                            '<input type="text" id="' + g.Id + '" value="' + g.TotalCount+'" name="number_'+ g.Id+'" lay-verify="required|number"style="width:80px" class="layui-input">'+
+                            '</div>' +
+                            '</div>';
+                    });
+                    $("#divnumberbox").append(str);
+                });
+
+
+            $('#ReceivePersons').on('hidden.bs.select', function (e) {
+                if (e.target.value) {
+                    var receivePersons = $('#ReceivePersons').val();
+                    if (receivePersons.length>0)
+                        $.post('@Url.Action("GetReceiverInfo")',
+                            { strIds: receivePersons},
+                            function (data) {
+                                var str = "";
+                                $("#divnumberbox").html("");
+                                data.forEach(function(g, index) {
+                                    str+= '<div class="layui-inline">' +
+                                        '<label class="layui-form-label">' + g.TrueName+'</label>' +
+                                        '<div class="layui-input-block">' +
+                                        '<input type="text" id="' + g.Id + '" name="number_'+ g.Id+'" lay-verify="required|number"style="width:80px" class="layui-input">'+
+                                        '</div>' +
+                                        '</div>';
+                                });
+                                $("#divnumberbox").append(str);
+                            });
+                }
+            });
+
+
+
             //监听提交
             form.on('submit(demo1)', function (data) {
+                var strNum = "";
+                $.each(data.field, function(i, val) {
+                    if (i.indexOf("_")>0) {
+                        strNum += i.split("_")[1]+","+val+"|";
+                    }
+                });  
+                //规则  30,77|31,88
+                data.field.strNumber = (strNum.substring(strNum.length - 1) === '|')
+                    ? strNum.substring(0, strNum.length - 1) : strNum;
+                data.field.Id = managecom.getUrlParam("Id");
 
                 var orderTypeIds = $('#OrderTypeId').val();
 

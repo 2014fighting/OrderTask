@@ -38,3 +38,16 @@ var enumReceiveState = [
     { value: "4", text: "确认完成" }
 
 ];
+
+
+var enumDataType = [
+    { value: "1", text: "白底图" },
+    { value: "2", text: "场景图" },
+    { value: "3", text: "套脚图" },
+    { value: "4", text: "模特图" },
+    { value: "5", text: "详情页" },
+    { value: "6", text: "专辑页" },
+    { value: "7", text: "标准图" },
+    { value: "8", text: "广告图" },
+    { value: "9", text: "入口图" }
+]

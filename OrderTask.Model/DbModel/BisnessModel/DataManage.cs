@@ -7,7 +7,7 @@ using System.Text;
 namespace OrderTask.Model.DbModel.BisnessModel
 {
     [Table("t_DataManage")]
-    public  class DataManage : BaseEntity<int>
+    public class DataManage : BaseEntity<int>
     {
         /// <summary>
         /// 款号
@@ -16,57 +16,29 @@ namespace OrderTask.Model.DbModel.BisnessModel
         public string ProductNum { get; set; }
 
         /// <summary>
-        /// 白底图
+        /// 所属订单
         /// </summary>
-        [MaxLength(300)]
-        public string BaidiAddress { get; set; }
+        public int OrderId { get; set; }
+
+        [ForeignKey("OrderId")]
+        public Order Order { get; set; }
         /// <summary>
-        /// 场景图
+        /// 完成数量
         /// </summary>
         [MaxLength(300)]
-        public string ChangjingAddress { get; set; }
+        public int Count { get; set; }
 
         /// <summary>
-        /// 套脚图
+        /// 资料类型
         /// </summary>
         [MaxLength(300)]
-        public string TaojiaoAddress { get; set; }
+        public int DataType { get; set; }
 
         /// <summary>
-        /// 模特图
+        /// 资料路径
         /// </summary>
         [MaxLength(300)]
-        public string MoteAddress { get; set; }
-
-        /// <summary>
-        /// 详情页
-        /// </summary>
-        [MaxLength(300)]
-        public string XiangxiAddress { get; set; }
-
-        /// <summary>
-        /// 专辑页
-        /// </summary>
-        [MaxLength(300)]
-        public string ZhuantiAddress { get; set; }
-
-        /// <summary>
-        /// 标准图
-        /// </summary>
-        [MaxLength(300)]
-        public string BiaozhunAddress { get; set; }
-
-        /// <summary>
-        /// 广告图
-        /// </summary>
-        [MaxLength(300)]
-        public string GuanggaoAddress { get; set; }
-
-        /// <summary>
-        /// 入口图
-        /// </summary>
-        [MaxLength(300)]
-        public string RukouAddress { get; set; }
+        public string DataAddress { get; set; }
 
 
         [MaxLength(300)]

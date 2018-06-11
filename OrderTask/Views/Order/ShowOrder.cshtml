@@ -189,11 +189,12 @@
                 url: '@Url.Action("GetReceivePesionList","UserInfo")?orderId=' + managecom.getUrlParam("Id"), height:
                     'auto', cols: [[//标题栏
                     //{ checkbox: true, LAY_CHECKED: false }, //默认全选
-                    { field: 'Id', title: 'Id', width: 80, sort: true }
+                    { field: 'Id', title: 'Id', width:50, sort: true }
                     , { field: 'TrueName', title: '接单人', width:120 }
                     , { field: 'Group', title: '所属小组', width: 120, templet: '#groupTpl' }
-                    , { field: 'ReceiveState', title: '接收状态', width: 150, templet: '#ReceiveStateTpl' }
-                    , { field: 'RefuseResion', title: '拒绝原因', width: 140 }
+                    , { field: 'ReceiveState', title: '接收状态', width: 120, templet: '#ReceiveStateTpl' }
+                    , { field: 'RefuseResion', title: '拒绝原因', width: 120 }
+                    , { field: 'TotalCount', title: '应完成数量', width:100 }
                     , { field: 'JobScheduling', title: '当前排期', width: 160}
                     , {
                         field: 'viewbtn', title: '完成信息', width: 120, templet: function (d) {
