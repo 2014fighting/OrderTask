@@ -37,8 +37,8 @@
     <button class="layui-btn layui-btn-normal layui-btn-sm" id="btnadd"><i class="layui-icon">&#xe654;</i>新增</button>
     <button class="layui-btn layui-btn-sm" id="btnedit"><i class="layui-icon">&#xe642;</i>编辑</button>
     <button class="layui-btn layui-btn-danger layui-btn-sm" id="btndel"><i class="layui-icon">&#xe640;</i>删除</button>
-    <button class="layui-btn layui-btn-warm layui-btn-sm" lay-event="import"><i class="layui-icon">&#xe621;</i>导入</button>
-    <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="export"><i class="layui-icon">&#xe60a;</i>导出</button>
+    <button class="layui-btn layui-btn-warm layui-btn-sm" id="btnImport" lay-event="import"><i class="layui-icon">&#xe621;</i>导入</button>
+    <button class="layui-btn layui-btn-primary layui-btn-sm"id="btnExport"  lay-event="export"><i class="layui-icon">&#xe60a;</i>导出</button>
 </div>
 
 <table id="demo" lay-filter="test"></table>
@@ -75,7 +75,7 @@
                 , laydate = layui.laydate
                 , manage = layui.manageCom
                 , table = layui.table;
-           
+
             //日期
             laydate.render({
                 elem: '#date'
@@ -93,6 +93,25 @@
 
                 return false;
             });
+            $("#btnImport").on('click',
+                function () {
+                    layer.open({
+                        type: 2,
+                        title: '导入信息',
+                        shadeClose: true,
+                        //shade: false,
+                        maxmin: true, //开启最大化最小化按钮
+                        area: ['800px', '500px'],
+                        content: '@Url.Action("Index","Common")'
+                    });
+                });
+
+            $("#btnExport").on('click',
+                function () {
+                    var queryData = $(".layui-form").serializeArray();
+                    var temp = $('input[name="ProductNum"]').val();
+                    manage.download('@Url.Action("DataManageExport")', queryData, 'get');
+                });
 
             $("#btnadd").on('click',
                 function () {
@@ -106,6 +125,7 @@
                         content: '@Url.Action("AddDataManage")'
                     });
                 });
+
             $("#btnedit").on('click',
                 function () {
                     var checkStatus = table.checkStatus('demo');
@@ -169,14 +189,14 @@
                 , cols: [[ //标题栏
                     { checkbox: true, LAY_CHECKED: false } //默认全选
                     , { field: 'Id', title: 'Id', width: 80, sort: true }
-                    , { field: 'OrderId', title: '订单编号', width: 150 }
-                    , { field: 'ProductNum', title: '款号', width:150 }
+                    , { field: 'OrderId', title: '订单编号', width: 100 }
+                    , { field: 'ProductNum', title: '款号', width:130 }
                     , { field: 'Count', title: '完成数量', width: 100 }
-                    , { field: 'DataType', title: '资料类型', width: 120, templet: '#DataTypeTpl' }
+                    , { field: 'DataType', title: '资料类型', width: 100, templet: '#DataTypeTpl' }
                     , { field: 'DataAddress', title: '资料路径', width: 120 }
-                    , { field: 'Remark', title: '备注', width: 120 }
-                    , { field: 'CreateUser', title:'创建人', width: 180 }
-                    , { field: 'CreateTime', title: '创建时间', width: 180, sort: true }
+                    , { field: 'Remark', title: '备注', width: 100 }
+                    , { field: 'CreateUser', title:'创建人', width: 120 }
+                    , { field: 'CreateTime', title: '创建时间', width: 160, sort: true }
                     , { fixed: 'right', width: 210, align: 'center', toolbar: '#barDemo' }
                 ]]
                 //, skin: 'row' //表格风格
@@ -207,7 +227,7 @@
                     layer.confirm('真的删除' + data.Id + '这行么', function (index) {
                         var postdata = [];
                         postdata.push(data.Id);
-                   
+
                         $.ajax({
                             type: "post",
                             url: '@Url.Action("DataManageDelete")',

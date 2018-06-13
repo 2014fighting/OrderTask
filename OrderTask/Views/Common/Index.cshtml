@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="layui-container">
+    <p>导入流程:</p>
+    <p> 点击确认导入按钮-->选择文件-->上传文件-->自动开始导入数据-->导入成功</p>
+    <p> 注意:</p>
+    <p>
+        导入时只能选择xls或者xlsx类型的文件进行导入导入前，请先检查一下您的Exel数据是否正确,比如:是否有错位的列,
+        或者错位的行导致数据对应不一致设置模板字段点击配置从这里可以获取导入模板
+    </p>
+    <p> 导入信息:</p>
+    <p>当前导入表:资料库表</p>
+  
+ 
+</div>
+
+
+<div class="layui-container comfield">
+
+    <button type="button" class="layui-btn" id="btnSelectFile">
+        <i class="layui-icon">&#xe67c;</i>选择导入文件
+    </button>
+    <a class="layui-btn"  href="~/ExcelTemplate/dataManageTp.xlsx">点击下载导入模板</a>
+    <button class="layui-btn layui-btn-primary"
+            onclick="parent.layer.close(index);">
+        关闭
+    </button>
+</div>
+<script type="text/javascript">
+    //注意：parent 是 JS 自带的全局对象，可用于操作父页面
+    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+    layui.use(['form', 'layedit', 'table', 'layer', 'laydate', 'manageCom','upload'],
+        function () {
+
+            var form = layui.form,
+                layer = layui.layer,
+                laydate = layui.laydate,
+                upload = layui.upload,
+                managecom = layui.manageCom;
+            
+            
+            //指定允许上传的文件类型
+            upload.render({
+                elem: '#btnSelectFile'
+                ,url: '@Url.Action("DataManageImport","DataManage")'
+                ,accept: 'file' //普通文件
+                ,done: function(res) {
+                    if (res.code === 0) {
+                        parent.layer.close(index);
+                        parent.layer.alert(res.msg);
+                        parent.tableIns.reload();
+                    } else
+                        layer.alert(res.msg);
+                }
+            });   
+
+        });
+
+
+</script>
