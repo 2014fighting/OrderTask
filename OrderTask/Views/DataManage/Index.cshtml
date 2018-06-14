@@ -110,7 +110,13 @@
                 function () {
                     var queryData = $(".layui-form").serializeArray();
                     var temp = $('input[name="ProductNum"]').val();
-                    manage.download('@Url.Action("DataManageExport")', queryData, 'get');
+                    layer.confirm('确认导出数据？', {
+                        btn: ['嗯没错','取消'] //按钮
+                    }, function(){
+                      manage.download('@Url.Action("DataManageExport")', queryData, 'get');
+                    }, function(){
+                         
+                    });
                 });
 
             $("#btnadd").on('click',

@@ -22,7 +22,8 @@ namespace OrderTask.Service.Service.ExportImport
         {
             _unitOfWork = unitOfWork;
         }
-        public ResultModel ImportDataManageFromXlsx(Stream stream, UserSession curUserInfo)
+        public ResultModel ImportDataManageFromXlsx(
+            Stream stream, UserSession curUserInfo)
         {
             try
             {
@@ -107,31 +108,7 @@ namespace OrderTask.Service.Service.ExportImport
                 throw;
             }
         }
-
-
-        protected virtual IList<PropertyByName<T>> GetPropertiesByExcelCells<T>(ExcelWorksheet worksheet)
-        {
-            var properties = new List<PropertyByName<T>>();
-            var poz = 1;
-            while (true)
-            {
-                try
-                {
-                    var cell = worksheet.Cells[1, poz];
-
-                    if (cell == null || cell.Value == null || string.IsNullOrEmpty(cell.Value.ToString()))
-                        break;
-
-                    poz += 1;
-                    properties.Add(new PropertyByName<T>(cell.Value.ToString()));
-                }
-                catch
-                {
-                    break;
-                }
-            }
-
-            return properties;
-        }
+         
+      
     }
 }

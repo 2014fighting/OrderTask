@@ -184,6 +184,11 @@ namespace OrderTask.Web.Controllers
             var result = _unitOfWork.GetRepository<DataManage>().GetEntities();
             if (!string.IsNullOrEmpty(dataManage.ProductNum))
                 result = result.Where(i => i.ProductNum.Contains(dataManage.ProductNum));
+
+            if (dataManage.OrderId.HasValue)
+                result = result.Where(i => i.OrderId==dataManage.OrderId);
+
+
             var w1 = result.OrderByDescending(x => x.Id).Skip((dataManage.page - 1) * dataManage.limit).Take(dataManage.limit);
             return Json(new
             {

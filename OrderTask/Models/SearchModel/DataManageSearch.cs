@@ -10,5 +10,7 @@ namespace OrderTask.Web.Models.SearchModel
         public int? Id { get; set; }
     
         public string ProductNum { get; set; }
+
+        public int? OrderId { get; set; }
     }
 }
