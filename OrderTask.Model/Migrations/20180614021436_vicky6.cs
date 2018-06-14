@@ -40,10 +40,9 @@ namespace OrderTask.Model.Migrations
                 name: "XiangxiAddress",
                 table: "t_DataManage");
 
-            migrationBuilder.RenameColumn(
+            migrationBuilder.DropColumn(
                 name: "ZhuantiAddress",
-                table: "t_DataManage",
-                newName: "DataAddress");
+                table: "t_DataManage");
 
             migrationBuilder.AddColumn<int>(
                 name: "Count",
@@ -51,6 +50,12 @@ namespace OrderTask.Model.Migrations
                 maxLength: 300,
                 nullable: false,
                 defaultValue: 0);
+
+            migrationBuilder.AddColumn<string>(
+                name: "DataAddress",
+                table: "t_DataManage",
+                maxLength: 320,
+                nullable: true);
 
             migrationBuilder.AddColumn<int>(
                 name: "DataType",
@@ -94,17 +99,16 @@ namespace OrderTask.Model.Migrations
                 table: "t_DataManage");
 
             migrationBuilder.DropColumn(
+                name: "DataAddress",
+                table: "t_DataManage");
+
+            migrationBuilder.DropColumn(
                 name: "DataType",
                 table: "t_DataManage");
 
             migrationBuilder.DropColumn(
                 name: "OrderId",
                 table: "t_DataManage");
-
-            migrationBuilder.RenameColumn(
-                name: "DataAddress",
-                table: "t_DataManage",
-                newName: "ZhuantiAddress");
 
             migrationBuilder.AddColumn<string>(
                 name: "BaidiAddress",
@@ -150,6 +154,12 @@ namespace OrderTask.Model.Migrations
 
             migrationBuilder.AddColumn<string>(
                 name: "XiangxiAddress",
+                table: "t_DataManage",
+                maxLength: 300,
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "ZhuantiAddress",
                 table: "t_DataManage",
                 maxLength: 300,
                 nullable: true);

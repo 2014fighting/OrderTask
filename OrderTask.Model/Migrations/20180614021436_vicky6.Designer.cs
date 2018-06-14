@@ -11,7 +11,7 @@ using System;
 namespace OrderTask.Model.Migrations
 {
     [DbContext(typeof(OrderTaskContext))]
-    [Migration("20180607030559_vicky6")]
+    [Migration("20180614021436_vicky6")]
     partial class vicky6
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,7 +37,7 @@ namespace OrderTask.Model.Migrations
                     b.Property<int?>("CreateUserId");
 
                     b.Property<string>("DataAddress")
-                        .HasMaxLength(300);
+                        .HasMaxLength(320);
 
                     b.Property<int>("DataType")
                         .HasMaxLength(300);

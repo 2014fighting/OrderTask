@@ -36,7 +36,7 @@ namespace OrderTask.Model.Migrations
                     b.Property<int?>("CreateUserId");
 
                     b.Property<string>("DataAddress")
-                        .HasMaxLength(300);
+                        .HasMaxLength(320);
 
                     b.Property<int>("DataType")
                         .HasMaxLength(300);

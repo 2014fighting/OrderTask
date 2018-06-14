@@ -37,9 +37,8 @@ namespace OrderTask.Model.DbModel.BisnessModel
         /// <summary>
         /// 资料路径
         /// </summary>
-        [MaxLength(300)]
+        [MaxLength(320)]
         public string DataAddress { get; set; }
-
 
         [MaxLength(300)]
         public string Remark { get; set; }
