@@ -13,7 +13,7 @@
                     <div class="layui-input-inline">
                         <input type="text" name="OrderId" lay-verify="" autocomplete="off" placeholder="请输入订单号" class="layui-input">
                     </div>
-               
+
                     <label class="layui-form-label">款号</label>
                     <div class="layui-input-inline">
                         <input type="text" name="ProductNum" lay-verify="" autocomplete="off" placeholder="请输入款号" class="layui-input">
@@ -43,7 +43,7 @@
     <button class="layui-btn layui-btn-sm" id="btnedit"><i class="layui-icon">&#xe642;</i>编辑</button>
     <button class="layui-btn layui-btn-danger layui-btn-sm" id="btndel"><i class="layui-icon">&#xe640;</i>删除</button>
     <button class="layui-btn layui-btn-warm layui-btn-sm" id="btnImport" lay-event="import"><i class="layui-icon">&#xe621;</i>导入</button>
-    <button class="layui-btn layui-btn-primary layui-btn-sm"id="btnExport"  lay-event="export"><i class="layui-icon">&#xe60a;</i>导出</button>
+    <button class="layui-btn layui-btn-primary layui-btn-sm" id="btnExport" lay-event="export"><i class="layui-icon">&#xe60a;</i>导出</button>
 </div>
 
 <table id="demo" lay-filter="test"></table>
@@ -58,12 +58,18 @@
     {{ res }}
     {{# } }}
 </script>
+<script type="text/html" id="DataAddressTpl">
+  
+    <a style="color:blue" href="ftp://{{d.DataAddress}}" target="_blank">{{d.DataAddress}}</a>
+ 
+</script>
 
+ 
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail"><i class="layui-icon">&#xe615;</i>查看</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit"><i class="layui-icon">&#xe642;</i>编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon">&#xe640;</i>删除</a>
-    
+
 </script>
 
 <script type="text/javascript">
@@ -120,7 +126,7 @@
                     }, function(){
                       manage.download('@Url.Action("DataManageExport")', queryData, 'get');
                     }, function(){
-                         
+
                     });
                 });
 
@@ -204,7 +210,7 @@
                     , { field: 'ProductNum', title: '款号', width:130 }
                     , { field: 'Count', title: '完成数量', width: 100 }
                     , { field: 'DataType', title: '资料类型', width: 100, templet: '#DataTypeTpl' }
-                    , { field: 'DataAddress', title: '资料路径', width: 120 }
+                    , { field: 'DataAddress', title: '资料路径', width: 120, templet: '#DataAddressTpl' }
                     , { field: 'Remark', title: '备注', width: 100 }
                     , { field: 'CreateUser', title:'创建人', width: 120 }
                     , { field: 'CreateTime', title: '创建时间', width: 160, sort: true }

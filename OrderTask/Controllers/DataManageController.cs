@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OrderTask.Common.Help;
 using OrderTask.Model;
+using OrderTask.Model.DbModel;
 using OrderTask.Model.DbModel.BisnessModel;
 using OrderTask.Service.Service.ExportImport.Help;
 using OrderTask.Service.ServiceInterface;
@@ -16,6 +17,7 @@ using OrderTask.UnitOfWork;
 using OrderTask.Web.Models;
 using OrderTask.Web.Models.Common;
 using OrderTask.Web.Models.SearchModel;
+using OrderTask.Web.SysFilter;
 
 namespace OrderTask.Web.Controllers
 {
@@ -132,6 +134,16 @@ namespace OrderTask.Web.Controllers
         {
             var res = new MgResult();
 
+
+            var user = _unitOfWork.GetRepository<UserInfo>().
+                GetEntities(x => x.Id == CurUserInfo.UserId).FirstOrDefault();
+
+            if (user?.DepartMentId != 3 || CurUserInfo.RoleList.Any(i => i != "经理"))
+            {
+                res.Code = 999;
+                res.Msg = "只有部门经理可以操作！";
+                return Json(res);
+            }
             var receivePerson = _unitOfWork.GetRepository<ReceivePerson>()
                 .GetEntities(i => i.OrderId == model.OrderId && i.UserInfoId == CurUserInfo.UserId).FirstOrDefault();
             if (receivePerson == null)
@@ -203,6 +215,17 @@ namespace OrderTask.Web.Controllers
         [HttpPost]
         public ActionResult DataManageDelete(List<int> ids)
         {
+            var res = new MgResult();
+
+            var user = _unitOfWork.GetRepository<UserInfo>().
+                GetEntities(x=>x.Id==CurUserInfo.UserId).FirstOrDefault();
+            
+            if (user?.DepartMentId != 3 || CurUserInfo.RoleList.Any(i => i!="经理"))
+            {
+                res.Code = 999;
+                res.Msg = "只有部门经理可以操作！";
+                return Json(res);
+            }
             var result = _unitOfWork.GetRepository<DataManage>();
             ids.ForEach(i =>
             {

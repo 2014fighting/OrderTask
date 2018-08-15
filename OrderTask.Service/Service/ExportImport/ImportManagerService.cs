@@ -59,17 +59,19 @@ namespace OrderTask.Service.Service.ExportImport
                         dm.Count = worksheet.Cells[row, 3].Value.ToInt();
                         dm.DataType = ExcelDataTransform.GetDataType(worksheet.Cells[row, 4].Value.ToString()) ;
                         dm.DataAddress = worksheet.Cells[row,5].Value.ToString();
-                        dm.Remark = worksheet.Cells[row,6].Value.ToString();
+                        dm.Remark = worksheet.Cells[row,6].Value?.ToString();
                         dm.CreateUserId = curUserInfo.UserId;
                         dm.CreateTime=DateTime.Now;
                         dm.CreateUser = curUserInfo.TrueName;
                         listdm.Add(dm);
                     }
-                  
+                 
                     //根据订单分组统计导入的订单的完成数量是否超标
                     foreach (var item in listdm.GroupBy(i => i.OrderId))
                     {
                         var orderid = item.First().OrderId;
+                        if(orderid==1)
+                            continue;
 
                         var receivePerson = repReceivePersion
                             .GetEntities(i => i.OrderId == orderid && i.UserInfoId == curUserInfo.UserId).FirstOrDefault();

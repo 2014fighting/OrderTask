@@ -75,7 +75,7 @@ namespace OrderTask.Web.Controllers
                 {
                     identity.AddClaim(new Claim(MyClaimTypes.Role, i.RoleInfo.RoleName));
                 });
-
+                //广义sessoin  分sessoinId  和tooken 以下为简易sessionid实现
                 // 将用户身份信息写入到响应cookie中 ，[Authorize]
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(identity));
