@@ -242,18 +242,33 @@ namespace OrderTask.Web.Controllers
         {
             var lisSelectGroup=new List<SelectGroup>();
             var represult = _unitOfWork.GetRepository<UserInfo>();
-           var result1= represult.GetEntities(i => i.Group != null&&i.DepartMent.DptName=="设计部").Select(i=>i.Group).Distinct().ToList();
+           var result1= represult.GetEntities(i => i.Group != null&&i.DepartMent.DptName=="设计部"
+                                                   &&i.UserRoles.Any(x=>x.RoleInfo.RoleName=="组长"))
+               .Select(i=>i.Group).Distinct().ToList();
             result1.ForEach(i =>
             {
-                var tempuser = represult.GetEntities(x => x.Group == i&&x.DepartMent.DptName=="设计部").ProjectTo<SelectsModel>().ToList();
+                
+                var tempuser = represult.GetEntities(x => x.Group == i&&x.DepartMent.DptName=="设计部"
+                                          &&x.UserRoles.Any(a => a.RoleInfo.RoleName == "组长"))
+                    .ProjectTo<SelectsModel>().ToList();
+
+
                 lisSelectGroup.Add(new SelectGroup(){Group =i, SelectsModel=tempuser});
             });
                //var result = _unitOfWork.GetRepository<UserInfo>()
                // .GetEntities().ProjectTo<SelectsModel>();
             return Json(lisSelectGroup.ToList());
         }
-         
+
         [HttpGet]
+        public ActionResult GetUserListByGroup(string group)
+        {
+             var result = _unitOfWork.GetRepository<UserInfo>()
+              .GetEntities(i=>i.Group==group).ProjectTo<SelectsModel>();
+            return Json(result.ToList());
+        }
+        
+       [HttpGet]
         public ActionResult GetReceivePesionList(int orderId)
         {
             var list=new List<ReceivePersonModel>();

@@ -14,7 +14,7 @@
                         <input type="text" name="OrderId" lay-verify="" autocomplete="off" placeholder="请输入订单号" class="layui-input">
                     </div>
 
-                    <label class="layui-form-label">款号</label>
+                    <label  class="layui-form-label">款号</label>
                     <div class="layui-input-inline">
                         <input type="text" name="ProductNum" lay-verify="" autocomplete="off" placeholder="请输入款号" class="layui-input">
                     </div>
@@ -59,9 +59,10 @@
     {{# } }}
 </script>
 <script type="text/html" id="DataAddressTpl">
-  
-    <a style="color:blue" href="ftp://{{d.DataAddress}}" target="_blank">{{d.DataAddress}}</a>
- 
+    @*<textarea onclick="jsCopy(this);" rows="2" cols="70" >{{d.DataAddress}}</textarea>*@
+   
+    <span onclick="execClick();" style="cursor:pointer"
+          oncopy="execCopy(event,this);">{{d.DataAddress}}</span>
 </script>
 
  
@@ -78,6 +79,42 @@
 *author:wenqing
 *资料管理界面js
 */
+    
+    function execClick(){
+        document.execCommand("copy");
+    }
+
+    function execCopy(event,thisDiv){
+        if(isIE()){
+            if(window.clipboardData){
+                window.clipboardData.setData("Text", thisDiv.textContent);
+                layer.msg('复制成功！');
+            }
+        } else {
+            console.info(event);
+            event.preventDefault();
+            if (event.clipboardData) {
+                event.clipboardData.setData("text/plain", thisDiv.textContent);
+                layer.msg('复制成功！');
+            }
+        }
+    }
+
+    function isIE(){
+        var input = window.document.createElement ("input");
+        //"!window.ActiveXObject" is evaluated to true in IE11
+        if (window.ActiveXObject === undefined) return null;
+        if (!window.XMLHttpRequest) return 6;
+        if (!window.document.querySelector) return 7;
+        if (!window.document.addEventListener) return 8;
+        if (!window.atob) return 9;
+        //"!window.document.body.dataset" is faster but the body is null when the DOM is not
+        //ready. Anyway, an input tag needs to be created to check if IE is being
+        //emulated
+        if (!input.dataset) return 10;
+        return 11;
+    }
+
     ; layui.use(['form', 'layedit', 'laydate', 'table', 'layer', 'manageCom'],
         function () {
 
@@ -198,6 +235,12 @@
 
                     });
                 });
+
+
+          
+
+
+
             //展示已知数据
             tableIns = table.render({
                 elem: '#demo',
@@ -210,7 +253,8 @@
                     , { field: 'ProductNum', title: '款号', width:130 }
                     , { field: 'Count', title: '完成数量', width: 100 }
                     , { field: 'DataType', title: '资料类型', width: 100, templet: '#DataTypeTpl' }
-                    , { field: 'DataAddress', title: '资料路径', width: 120, templet: '#DataAddressTpl' }
+                    //, { field: 'DataAddress', title: '资料路径', width: 120, event: 'setSign' }
+                    , { field: 'DataAddress', title: '资料路径', width: 120, templet:"#DataAddressTpl" }
                     , { field: 'Remark', title: '备注', width: 100 }
                     , { field: 'CreateUser', title:'创建人', width: 120 }
                     , { field: 'CreateTime', title: '创建时间', width: 160, sort: true }
@@ -229,7 +273,18 @@
                 var data = obj.data; //获得当前行数据
                 var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
                 var tr = obj.tr; //获得当前行 tr 的DOM对象
-                console.info(data);
+               
+              
+
+                if (layEvent === 'setSign') {
+                    document.execCommand("copy");
+                    console.info(event);
+                    event.preventDefault();
+                   // if (event.clipboardData) {
+                        event.clipboardData.setData("text/plain", tr.textContent);
+                        layer.msg('复制成功！');
+                   // }
+                }
                 if (layEvent === 'detail') { //查看
                     layer.open({
                         type: 2,

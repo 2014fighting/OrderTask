@@ -11,7 +11,8 @@
                 $('fieldset').outerHeight(true) -
                 $('.mytool').outerHeight(true);
         },
-        selectInint: function(selectName/*name选择器*/,data/*enumData.js数据*/,defaulVal/*默认值*/) {
+        selectInint: function (selectName/*name选择器*/, data/*enumData.js数据*/, defaulVal/*默认值*/) {
+           
             data.forEach(function (item, index) {
                 console.info(!!defaulVal);
                 $("select[name='" + selectName+"']").append("<option value=" + item.value + ">" + item.text + "</option>");

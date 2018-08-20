@@ -59,8 +59,8 @@
             <div class="layui-form-item" id="itemrp" style="display: none">
                 <div class="layui-inline">
                     <label class="layui-form-label">接单人</label>
-                    <div class="layui-input-inline">
-                        <select name="ReceivePersons" id="ReceivePersons" lay-verify="required" lay-search="">
+                    <div class="layui-input-inline layui-form" lay-filter="ReceivePersons_select">
+                        <select name="ReceivePersons"   id="ReceivePersons" lay-verify="" lay-search="">
                             <option value="">直接选择或搜索选择</option>
                         </select>
                     </div>
@@ -115,11 +115,11 @@
             @*</div>
                 </div>*@
             <script type="text/html" id="barDemo">
-                {{# var a='@ViewBag.ismanager'; if(a!='False'){ }}
+                @*{{# var a='@ViewBag.ismanager'; if(a!='False'){ }}*@
                 <a class="layui-btn layui-btn-xs" lay-event="ReSelect"><i class="layui-icon">&#xe642;</i>重新指派</a>
-                {{# } else { }}
+                @*{{# } else { }}
                 <a class="layui-btn layui-btn-xs layui-btn-disabled" lay-event="ReSelect"><i class="layui-icon">&#xe642;</i>重新指派</a>
-                {{# } }}
+                {{# } }}*@
                
                 <a class="layui-btn layui-btn-danger layui-btn-xs"  lay-event="Evaluate"><i class="layui-icon">&#xe630;</i>评分</a>
                 
@@ -156,36 +156,21 @@
             $('#OrderTypeId').selectpicker('render');
 
 
+            function getUserListBygroup(group) {
+               
+                $.get('@Url.Action("GetUserListByGroup", "UserInfo")',
+                    { group: group }, function (data) {
+                    managecom.selectInint('ReceivePersons', data);
+                    form.render('select',"ReceivePersons_select");
+                });
+            }
 
-
-            $.get('@Url.Action("GetUserList","UserInfo")', function (data) {
-                console.info(data);
-                data.forEach(
-                    function (groups, index) {
-                        var tempg = groups.Group;
-                        enumGroup.forEach(function(item, index) {
-                            if (item.value == groups.Group) {
-                                tempg = item.text+"组";
-                                return;
-                            }
-                        });
-                        var otpgroup = "<optgroup  label=" + tempg + ">";
-                        var otptions = "";
-                        groups.SelectsModel.forEach(
-                            function (item, index) {
-                                otptions = otptions+"<option value=" + item.value + ">" + item.text +"</option>";
-                            });
-                        otpgroup = otpgroup + otptions + "</optgroup>";
-
-                        $('#ReceivePersons').append(otpgroup);
-                        console.info(otpgroup);
-                    }); form.render('select');
-
-            });
+         
 
             //展示已知数据
             var tableIns = table.render({
-                elem: '#demo',
+                elem: '#demo',                 
+
                 url: '@Url.Action("GetReceivePesionList","UserInfo")?orderId=' + managecom.getUrlParam("Id"), height:
                     'auto', cols: [[//标题栏
                     //{ checkbox: true, LAY_CHECKED: false }, //默认全选
@@ -312,12 +297,16 @@
                 var tr = obj.tr; //获得当前行 tr 的DOM对象
                 console.info(data);
                 if (layEvent === 'ReSelect') { //重新指派
-                    if ('@ViewBag.ismanager' == 'False') {
+                    @*if ('@ViewBag.ismanager' == 'False') {
                         return;
-                    }
+                    }*@
+                    
                     //清空选值
-                    $('#ReceivePersons').val('');
-                    form.render('select');
+                    //$('#ReceivePersons').val('');
+                    document.getElementById("ReceivePersons").options.length = 0;
+                    
+                    getUserListBygroup(data.Group);
+
                     layer.open({
                         type:1,
                         title: '重新指派接单人',
