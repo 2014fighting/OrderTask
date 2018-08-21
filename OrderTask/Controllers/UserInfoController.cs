@@ -261,11 +261,20 @@ namespace OrderTask.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetUserListByGroup(string group)
+        public ActionResult GetUserListByGroup()
         {
-             var result = _unitOfWork.GetRepository<UserInfo>()
-              .GetEntities(i=>i.Group==group).ProjectTo<SelectsModel>();
-            return Json(result.ToList());
+            var lisSelectGroup = new List<SelectGroup>();
+            var represult = _unitOfWork.GetRepository<UserInfo>();
+            var result1 = represult.GetEntities(i => i.Group != null && i.DepartMent.DptName == "设计部")
+                .Select(i => i.Group).Distinct().ToList();
+            result1.ForEach(i =>
+            {
+                var tempuser = represult.GetEntities(x => x.Group == i && x.DepartMent.DptName == "设计部")
+                    .ProjectTo<SelectsModel>().ToList();
+                lisSelectGroup.Add(new SelectGroup() { Group = i, SelectsModel = tempuser });
+            });
+            
+            return Json(lisSelectGroup.ToList());
         }
         
        [HttpGet]

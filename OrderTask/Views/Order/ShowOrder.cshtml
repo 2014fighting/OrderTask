@@ -115,11 +115,11 @@
             @*</div>
                 </div>*@
             <script type="text/html" id="barDemo">
-                @*{{# var a='@ViewBag.ismanager'; if(a!='False'){ }}*@
+                {{# var a='@ViewBag.ismanagerOrgl'; if(a!='False'){ }}
                 <a class="layui-btn layui-btn-xs" lay-event="ReSelect"><i class="layui-icon">&#xe642;</i>重新指派</a>
-                @*{{# } else { }}
+                {{# } else { }}
                 <a class="layui-btn layui-btn-xs layui-btn-disabled" lay-event="ReSelect"><i class="layui-icon">&#xe642;</i>重新指派</a>
-                {{# } }}*@
+                {{# } }}
                
                 <a class="layui-btn layui-btn-danger layui-btn-xs"  lay-event="Evaluate"><i class="layui-icon">&#xe630;</i>评分</a>
                 
@@ -156,20 +156,43 @@
             $('#OrderTypeId').selectpicker('render');
 
 
-            function getUserListBygroup(group) {
-               
+            @*function getUserListBygroup(group) {
+
                 $.get('@Url.Action("GetUserListByGroup", "UserInfo")',
                     { group: group }, function (data) {
                     managecom.selectInint('ReceivePersons', data);
                     form.render('select',"ReceivePersons_select");
                 });
-            }
+            }*@
 
-         
+            $.get('@Url.Action("GetUserListByGroup", "UserInfo")', function (data) {
+                console.info(data);
+                data.forEach(
+                    function (groups, index) {
+                        var tempg = groups.Group;
+                        enumGroup.forEach(function(item, index) {
+                            if (item.value == groups.Group) {
+                                tempg = item.text+"组";
+                                return;
+                            }
+                        });
+                        var otpgroup = "<optgroup  label=" + tempg + ">";
+                        var otptions = "";
+                        groups.SelectsModel.forEach(
+                            function (item, index) {
+                                otptions = otptions+"<option value=" + item.value + ">" + item.text +"</option>";
+                            });
+                        otpgroup = otpgroup + otptions + "</optgroup>";
+
+                        $('#ReceivePersons').append(otpgroup);
+                        console.info(otpgroup);
+                    }); form.render('select');
+
+            });
 
             //展示已知数据
             var tableIns = table.render({
-                elem: '#demo',                 
+                elem: '#demo',
 
                 url: '@Url.Action("GetReceivePesionList","UserInfo")?orderId=' + managecom.getUrlParam("Id"), height:
                     'auto', cols: [[//标题栏
@@ -297,15 +320,15 @@
                 var tr = obj.tr; //获得当前行 tr 的DOM对象
                 console.info(data);
                 if (layEvent === 'ReSelect') { //重新指派
-                    @*if ('@ViewBag.ismanager' == 'False') {
+                    if ('@ViewBag.ismanagerOrgl' == 'False') {
                         return;
-                    }*@
-                    
+                    }
+
                     //清空选值
-                    //$('#ReceivePersons').val('');
-                    document.getElementById("ReceivePersons").options.length = 0;
-                    
-                    getUserListBygroup(data.Group);
+                     $('#ReceivePersons').val('');
+                  //  document.getElementById("ReceivePersons").options.length = 0;
+
+                  //  getUserListBygroup(data.Group);
 
                     layer.open({
                         type:1,

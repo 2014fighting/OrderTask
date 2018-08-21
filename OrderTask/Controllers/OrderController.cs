@@ -125,7 +125,7 @@ namespace OrderTask.Web.Controllers
             res.Degree = order.Degree;
             res.Id = order.Id;
             res.OrderDescribe = order.OrderDescribe;
-            ViewBag.ismanager = CurUserInfo.RoleList.Any(i => i.Contains("经理"));
+            ViewBag.ismanagerOrgl = CurUserInfo.RoleList.Any(i => i.Contains("经理")|| i.Contains("组长"));
             ViewBag.ReceivePesions = string.Join(",", order.ReceivePerson.Select(i => i.UserInfoId));
             return View(res);
         }
@@ -453,12 +453,13 @@ namespace OrderTask.Web.Controllers
         public ActionResult ReAppoint(int userId, int receiveId)
         {
             var result = new MgResult();
-            var receive = _unitOfWork.GetRepository<ReceivePerson>().GetEntities().Include(i => i.User)
-                .FirstOrDefault(i => i.Id == receiveId);
+            var receive = _unitOfWork.GetRepository<ReceivePerson>()
+                .GetEntities().Include(i => i.User)
+                .FirstOrDefault(i => i.Id == receiveId && i.ReceiveState == 3);
             if (receive == null)
             {
-                result.Code = 101;
-                result.Msg = "接单人不存在";
+                result.Code = 1;
+                result.Msg = "该接单人未拒绝不需要重新分配！";
                 return Json(result);
             }
 
