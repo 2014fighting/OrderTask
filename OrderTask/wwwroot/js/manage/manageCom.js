@@ -43,6 +43,11 @@
                 $('<form action="' + url + '" method="' + (method || 'post') + '">' + inputs + '</form>')
                     .appendTo('body').submit().remove();
             };
+        },
+        submitForbid:function(obj) {
+            var submitId = obj;
+            submitId.disabled = true;
+            setTimeout("submitId.disabled=false;", 3000); //代码核心在这里，3秒还原按钮代码
         }
 
 }

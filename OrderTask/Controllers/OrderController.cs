@@ -455,11 +455,11 @@ namespace OrderTask.Web.Controllers
             var result = new MgResult();
             var receive = _unitOfWork.GetRepository<ReceivePerson>()
                 .GetEntities().Include(i => i.User)
-                .FirstOrDefault(i => i.Id == receiveId && i.ReceiveState == 3);
+                .FirstOrDefault(i => i.Id == receiveId);
             if (receive == null)
             {
                 result.Code = 1;
-                result.Msg = "该接单人未拒绝不需要重新分配！";
+                result.Msg = "接单人不存在~！";
                 return Json(result);
             }
 

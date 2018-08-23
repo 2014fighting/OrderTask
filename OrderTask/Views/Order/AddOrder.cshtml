@@ -71,7 +71,7 @@
 
             <div class="layui-form-item">
                 <div class="layui-input-block">
-                    <a class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</a>
+                    <a class="layui-btn" lay-submit="" lay-filter="demo1" id="submitId">立即提交</a>
                     <a class="layui-btn layui-btn-primary" onclick="parent.layer.close(index);">关闭</a>
                 </div>
             </div>
@@ -187,8 +187,9 @@
 
             //监听提交
             form.on('submit(demo1)', function (data) {
-                console.info(data.field);
-
+                //点击按钮后禁用3秒 暂时解决重复提交问题，后期改为遮罩
+                managecom.submitForbid(this);
+              
                 var strNum = "";
                 $.each(data.field, function(i, val) {
                     if (i.indexOf("_")>0) {
@@ -198,8 +199,6 @@
                 //规则  30,77|31,88
                 data.field.strNumber = (strNum.substring(strNum.length - 1) === '|')
                     ? strNum.substring(0, strNum.length - 1) : strNum;
-  
-            
                 var orderTypeIds = $('#OrderTypeId').val();
 
                 var receivePersons = $('#ReceivePersons').val();
@@ -227,10 +226,9 @@
                         else
                             layer.msg("保存失败：" + data.Msg);
                     });
+               
                 return false;
             });
-
-
         });
 
 
