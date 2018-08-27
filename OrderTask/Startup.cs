@@ -109,6 +109,15 @@ namespace OrderTask.Web
             }
 
             app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = ctx =>
+                {
+                    // Requires the following import:
+                    // using Microsoft.AspNetCore.Http;
+                    
+                }
+            });
             app.UseAuthentication();//使用授权  
             app.UseMvc(routes =>
             {
