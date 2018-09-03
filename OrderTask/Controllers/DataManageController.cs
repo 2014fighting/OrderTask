@@ -138,7 +138,7 @@ namespace OrderTask.Web.Controllers
             var user = _unitOfWork.GetRepository<UserInfo>().
                 GetEntities(x => x.Id == CurUserInfo.UserId).FirstOrDefault();
 
-            if (user?.DepartMentId != 3 || CurUserInfo.RoleList.Any(i => i != "经理"))
+            if (user?.DepartMentId != 3 || CurUserInfo.RoleList.All(i => i != "经理"))
             {
                 res.Code = 999;
                 res.Msg = "只有部门经理可以操作！";
@@ -220,7 +220,7 @@ namespace OrderTask.Web.Controllers
             var user = _unitOfWork.GetRepository<UserInfo>().
                 GetEntities(x=>x.Id==CurUserInfo.UserId).FirstOrDefault();
             
-            if (user?.DepartMentId != 3 || CurUserInfo.RoleList.Any(i => i!="经理"))
+            if (user?.DepartMentId != 3 || CurUserInfo.RoleList.All(i => i != "经理"))
             {
                 res.Code = 999;
                 res.Msg = "只有部门经理可以操作！";
