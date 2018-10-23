@@ -227,6 +227,12 @@ namespace OrderTask.Web.Controllers
             if (order.OrderId.HasValue)
                 result = result.Where(i => i.Id==order.OrderId);
 
+             
+            if (!string.IsNullOrEmpty(order.ReceivePersionName))
+            {
+                result = result.Where(i => i.ReceivePerson.Any(y=>y.User.TrueName.Contains(order.ReceivePersionName)));
+            }
+
             if (!string.IsNullOrEmpty(order.OrderName))
                 result = result.Where(i => i.OrderName.Contains(order.OrderName));
             if (order.UserInfoId.HasValue)

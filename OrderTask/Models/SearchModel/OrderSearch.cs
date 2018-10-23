@@ -9,6 +9,7 @@ namespace OrderTask.Web.Models.SearchModel
     {
         public int? OrderId { get; set; }
         public string OrderName { get; set; }
+        public string ReceivePersionName { get; set; }
         public int? UserInfoId { get; set; }
     }
 }

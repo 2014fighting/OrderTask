@@ -19,10 +19,16 @@
                         <input type="text" name="OrderName" lay-verify="OrderName" autocomplete="off" placeholder="请输入" class="layui-input">
                     </div>
                 </div>
-                <div class="layui-inline">
+                @*<div class="layui-inline">
                     <label class="layui-form-label">下单人</label>
                     <div class="layui-input-inline">
                         <input type="text" name="UserName" lay-verify="" autocomplete="off" placeholder="请输入" class="layui-input">
+                    </div>
+                </div>*@
+                <div class="layui-inline">
+                    <label class="layui-form-label">接单人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="ReceivePersionName" lay-verify="" autocomplete="off" placeholder="请输入" class="layui-input">
                     </div>
                 </div>
             </div>
@@ -209,7 +215,7 @@
                     , { field: 'Id', title: 'Id', width: 80, sort: true }
                     , { field: 'OrderName', title: '订单名称', width: 220 }
                     , {
-                        field: 'OrderState', title: '订单状态', width: 100, templet: function(d) {
+                        field: 'OrderState', title: '订单状态', sort: true, width: 100, templet: function(d) {
                             var res; enumOrderState.forEach(function (item, index) { if (d.OrderState == item.value) { res = item.text; return; } });
                             if (res === undefined) return "";
                             else {
@@ -242,7 +248,7 @@
                 //, skin: 'row' //表格风格
                 , even: false
                 , page: true //是否显示分页
-                , limits: [5, 7, 10, 100]
+                , limits: [5, 7, 10, 100,500]
                 , limit: 10 //每页默认显示的数量
                 , loading: true
             });
