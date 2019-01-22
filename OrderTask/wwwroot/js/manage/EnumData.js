@@ -19,7 +19,8 @@ var enumOrderType = [
     { value: "1", text: "修图" },
     { value: "2", text: "设计" },
     { value: "3", text: "拍摄" },
-    { value: "4", text: "策划" }
+    { value: "4", text: "策划" },
+    { value: "5", text: "视频拍摄" }
 ];
 
 var enumOrderState = [
